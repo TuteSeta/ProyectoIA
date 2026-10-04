@@ -1,0 +1,39 @@
+// 01_esquema.cypher — Constraints de unicidad e índices (idempotente: IF NOT EXISTS)
+// Generado por salida/build/gen_cypher.py desde salida/build/modelo_spec.py
+
+CREATE CONSTRAINT frame_nombre IF NOT EXISTS FOR (n:Frame) REQUIRE n.nombre IS UNIQUE;
+CREATE CONSTRAINT slot_id IF NOT EXISTS FOR (n:Slot) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT regla_id IF NOT EXISTS FOR (n:Regla) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT excepcion_id IF NOT EXISTS FOR (n:Excepcion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT cliente_id IF NOT EXISTS FOR (n:Cliente) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT pedido_id IF NOT EXISTS FOR (n:Pedido) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT expresioncliente_id IF NOT EXISTS FOR (n:ExpresionCliente) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT referenciavisual_id IF NOT EXISTS FOR (n:ReferenciaVisual) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT requerimiento_id IF NOT EXISTS FOR (n:Requerimiento) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT dato_id IF NOT EXISTS FOR (n:Dato) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT categoriadato_id IF NOT EXISTS FOR (n:CategoriaDato) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT contradiccion_id IF NOT EXISTS FOR (n:Contradiccion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT aclaracion_id IF NOT EXISTS FOR (n:Aclaracion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT consultasubmodulo_id IF NOT EXISTS FOR (n:ConsultaSubmodulo) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT ficharequerimientos_id IF NOT EXISTS FOR (n:FichaRequerimientos) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT advertencia_id IF NOT EXISTS FOR (n:Advertencia) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT submodulo_id IF NOT EXISTS FOR (n:Submodulo) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT cartel_id IF NOT EXISTS FOR (n:Cartel) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT entorno_id IF NOT EXISTS FOR (n:Entorno) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT material_id IF NOT EXISTS FOR (n:Material) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT componenteelectrico_id IF NOT EXISTS FOR (n:ComponenteElectrico) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT soporte_id IF NOT EXISTS FOR (n:Soporte) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT sistemafijacion_id IF NOT EXISTS FOR (n:SistemaFijacion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT dictamenadecuacion_id IF NOT EXISTS FOR (n:DictamenAdecuacion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT verificacionprofesional_id IF NOT EXISTS FOR (n:VerificacionProfesional) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT geometria_id IF NOT EXISTS FOR (n:Geometria) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT herramienta_id IF NOT EXISTS FOR (n:Herramienta) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT tecnologiailuminacion_id IF NOT EXISTS FOR (n:TecnologiaIluminacion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT restriccionconstructiva_id IF NOT EXISTS FOR (n:RestriccionConstructiva) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT conflicto_id IF NOT EXISTS FOR (n:Conflicto) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT alternativarediseno_id IF NOT EXISTS FOR (n:AlternativaRediseno) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT recomendacion_id IF NOT EXISTS FOR (n:Recomendacion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT evaluacion_id IF NOT EXISTS FOR (n:Evaluacion) REQUIRE n.id IS UNIQUE;
+CREATE INDEX frame_submodulo IF NOT EXISTS FOR (n:Frame) ON (n.submodulo);
+CREATE INDEX instancia_caso IF NOT EXISTS FOR (n:Instancia) ON (n.caso);
+CREATE INDEX regla_origen IF NOT EXISTS FOR (n:Regla) ON (n.origen);

@@ -1,0 +1,36 @@
+# Dependencias
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Builds / renders generados
+salida/build/render/
+salida/build/render_10min/
+*.tsbuildinfo
+video/out/
+video/build/
+video/dist/
+.remotion/
+
+# Archivos temporales de Office (~$archivo.docx)
+~$*
+*.tmp
+
+# Claude Code (config local)
+.claude/
+
+# SO / editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Variables de entorno
+.env
+.env.*

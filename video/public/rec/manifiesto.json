@@ -1,0 +1,2179 @@
+{
+  "fps": 30,
+  "ancho": 2560,
+  "alto": 1320,
+  "pasos": [
+    {
+      "id": "grafo",
+      "sm": "INT",
+      "rotulo": "El caso CU1 cargado en Neo4j: el pedido P-01 tal como lo dejó Interpretación",
+      "capturas": [
+        {
+          "archivo": "0001.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0002.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0003.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0004.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0005.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0006.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0007.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0008.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0009.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0010.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0011.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0012.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0013.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0014.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0015.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0016.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0017.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0018.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0019.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0020.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0021.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0022.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0023.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0024.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0025.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0026.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0027.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0028.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0029.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0030.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0031.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0032.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0033.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0034.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0035.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0036.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0037.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0038.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0039.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0040.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0041.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0042.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0043.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0044.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0045.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0046.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0047.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0048.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0049.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0050.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0051.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0052.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0053.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0054.jpg",
+          "frames": 0
+        }
+      ],
+      "foco": {
+        "indice": 53,
+        "x": 0.5841402053833008,
+        "y": 0.4137766982569839,
+        "w": 0.18680191040039062,
+        "h": 0.5637989853367661
+      }
+    },
+    {
+      "id": "falta",
+      "sm": "INT",
+      "rotulo": "Interpretación detecta que falta el soporte (D4) y pide la aclaración A4",
+      "capturas": [
+        {
+          "archivo": "0055.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0056.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0057.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0058.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0059.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0060.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0061.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0062.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0063.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0064.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0065.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0066.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0067.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0068.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0069.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0070.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0071.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0072.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0073.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0074.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0075.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0076.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0077.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0078.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0079.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0080.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0081.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0082.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0083.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0084.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0085.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0086.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0087.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0088.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0089.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0090.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0091.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0092.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0093.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0094.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0095.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0096.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0097.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0098.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0099.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0100.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0101.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0102.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0103.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0104.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0105.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0106.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0107.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0108.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0109.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0110.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0111.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0112.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0113.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0114.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0115.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0116.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0117.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0118.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0119.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0120.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0121.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0122.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0123.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0124.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0125.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0126.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0127.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0128.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0129.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0130.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0131.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0132.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0133.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0134.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0135.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0136.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0137.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0138.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0139.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0140.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0141.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0142.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0143.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0144.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0145.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0146.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0147.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0148.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0149.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0150.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0151.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0152.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0153.jpg",
+          "frames": 210
+        }
+      ]
+    },
+    {
+      "id": "dictamen",
+      "sm": "MAT",
+      "rotulo": "Materiales: interior, exposición baja → dictamen apto (R-MI-10)",
+      "capturas": [
+        {
+          "archivo": "0154.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0155.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0156.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0157.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0158.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0159.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0160.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0161.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0162.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0163.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0164.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0165.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0166.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0167.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0168.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0169.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0170.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0171.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0172.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0173.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0174.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0175.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0176.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0177.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0178.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0179.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0180.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0181.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0182.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0183.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0184.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0185.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0186.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0187.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0188.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0189.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0190.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0191.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0192.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0193.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0194.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0195.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0196.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0197.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0198.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0199.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0200.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0201.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0202.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0203.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0204.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0205.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0206.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0207.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0208.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0209.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0210.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0211.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0212.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0213.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0214.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0215.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0216.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0217.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0218.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0219.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0220.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0221.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0222.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0223.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0224.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0225.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0226.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0227.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0228.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0229.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0230.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0231.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0232.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0233.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0234.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0235.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0236.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0237.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0238.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0239.jpg",
+          "frames": 180
+        }
+      ]
+    },
+    {
+      "id": "alternativas",
+      "sm": "MAN",
+      "rotulo": "Manufacturabilidad: 1000 mm no entran en la cama → 2 alternativas, ninguna descartada",
+      "capturas": [
+        {
+          "archivo": "0240.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0241.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0242.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0243.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0244.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0245.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0246.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0247.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0248.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0249.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0250.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0251.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0252.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0253.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0254.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0255.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0256.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0257.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0258.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0259.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0260.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0261.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0262.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0263.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0264.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0265.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0266.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0267.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0268.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0269.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0270.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0271.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0272.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0273.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0274.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0275.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0276.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0277.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0278.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0279.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0280.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0281.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0282.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0283.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0284.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0285.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0286.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0287.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0288.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0289.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0290.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0291.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0292.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0293.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0294.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0295.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0296.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0297.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0298.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0299.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0300.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0301.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0302.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0303.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0304.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0305.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0306.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0307.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0308.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0309.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0310.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0311.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0312.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0313.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0314.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0315.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0316.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0317.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0318.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0319.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0320.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0321.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0322.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0323.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0324.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0325.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0326.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0327.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0328.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0329.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0330.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0331.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0332.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0333.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0334.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0335.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0336.jpg",
+          "frames": 210
+        }
+      ]
+    },
+    {
+      "id": "traza",
+      "sm": "COM",
+      "rotulo": "Trazabilidad: las 17 reglas que se activaron, en orden y con su origen",
+      "capturas": [
+        {
+          "archivo": "0337.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0338.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0339.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0340.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0341.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0342.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0343.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0344.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0345.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0346.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0347.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0348.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0349.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0350.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0351.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0352.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0353.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0354.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0355.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0356.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0357.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0358.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0359.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0360.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0361.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0362.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0363.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0364.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0365.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0366.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0367.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0368.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0369.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0370.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0371.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0372.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0373.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0374.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0375.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0376.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0377.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0378.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0379.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0380.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0381.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0382.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0383.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0384.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0385.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0386.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0387.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0388.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0389.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0390.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0391.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0392.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0393.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0394.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0395.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0396.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0397.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0398.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0399.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0400.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0401.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0402.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0403.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0404.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0405.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0406.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0407.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0408.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0409.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0410.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0411.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0412.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0413.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0414.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0415.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0416.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0417.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0418.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0419.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0420.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0421.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0422.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0423.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0424.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0425.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0426.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0427.jpg",
+          "frames": 60
+        },
+        {
+          "archivo": "0428.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0429.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0430.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0431.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0432.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0433.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0434.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0435.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0436.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0437.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0438.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0439.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0440.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0441.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0442.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0443.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0444.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0445.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0446.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0447.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0448.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0449.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0450.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0451.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0452.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0453.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0454.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0455.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0456.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0457.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0458.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0459.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0460.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0461.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0462.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0463.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0464.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0465.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0466.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0467.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0468.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0469.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0470.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0471.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0472.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0473.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0474.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0475.jpg",
+          "frames": 75
+        }
+      ]
+    },
+    {
+      "id": "grafo_final",
+      "sm": "COM",
+      "rotulo": "El mismo caso después de las reglas: Interpretación, Materiales y Manufacturabilidad",
+      "capturas": [
+        {
+          "archivo": "0476.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0477.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0478.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0479.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0480.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0481.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0482.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0483.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0484.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0485.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0486.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0487.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0488.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0489.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0490.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0491.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0492.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0493.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0494.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0495.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0496.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0497.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0498.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0499.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0500.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0501.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0502.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0503.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0504.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0505.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0506.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0507.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0508.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0509.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0510.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0511.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0512.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0513.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0514.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0515.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0516.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0517.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0518.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0519.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0520.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0521.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0522.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0523.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0524.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0525.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0526.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0527.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0528.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0529.jpg",
+          "frames": 0
+        }
+      ],
+      "foco": {
+        "indice": 53,
+        "x": 0.2870187282562256,
+        "y": 0.44292412960168087,
+        "w": 0.1604764938354492,
+        "h": 0.5346515539920691
+      }
+    }
+  ]
+}
