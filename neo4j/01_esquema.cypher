@@ -34,6 +34,9 @@ CREATE CONSTRAINT conflicto_id IF NOT EXISTS FOR (n:Conflicto) REQUIRE n.id IS U
 CREATE CONSTRAINT alternativarediseno_id IF NOT EXISTS FOR (n:AlternativaRediseno) REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT recomendacion_id IF NOT EXISTS FOR (n:Recomendacion) REQUIRE n.id IS UNIQUE;
 CREATE CONSTRAINT evaluacion_id IF NOT EXISTS FOR (n:Evaluacion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT condicioninstalacion_id IF NOT EXISTS FOR (n:CondicionInstalacion) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT requisitomaterial_id IF NOT EXISTS FOR (n:RequisitoMaterial) REQUIRE n.id IS UNIQUE;
+CREATE CONSTRAINT agenteambiental_id IF NOT EXISTS FOR (n:AgenteAmbiental) REQUIRE n.id IS UNIQUE;
 CREATE INDEX frame_submodulo IF NOT EXISTS FOR (n:Frame) ON (n.submodulo);
 CREATE INDEX instancia_caso IF NOT EXISTS FOR (n:Instancia) ON (n.caso);
 CREATE INDEX regla_origen IF NOT EXISTS FOR (n:Regla) ON (n.origen);

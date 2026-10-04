@@ -13,7 +13,7 @@ Se comparte pantalla con **dos ventanas**: la terminal (Git Bash) y el Browser d
    cd "/d/University/Quinto/IA/Proyecto IA"
    bash neo4j/cargar.sh            # crea/arranca el contenedor y carga 01→04
    ```
-   Tiene que terminar con `✓ Listo` y el resumen `55, 105, 38, 122, 626`
+   Tiene que terminar con `✓ Listo` y el resumen `58, 123, 42, 139, 718`
    (frames, slots, reglas, instancias, relaciones).
 3. Abrir `http://localhost:7474` → usuario `neo4j`, contraseña `password`. Dejar abierta una pestaña.
 4. Probar la demo una vez sin pausas: `bash neo4j/demo.sh --sin-pausa` (tarda ~30 s).
@@ -34,22 +34,19 @@ Los pasos «silenciosos» se aplican solos y muestran una línea `· paso NN apl
 | # | Lo que aparece | Qué mostrar | Qué decir (resumido) |
 |---|---|---|---|
 | — | `→ Recargando la base…` | — | «Arrancamos con los casos cargados pero sin ninguna regla aplicada.» |
-| **01** | ¿Por qué P-01 todavía no puede evaluarse? | Columnas `faltantes`, `aclaraciones_pendientes`, `consultas` | «El pedido del Café Andino está pendiente: falta D4, el soporte. La aclaración A4 sigue sin respuesta y hay una consulta Q1 abierta a Materiales.» |
-| **02** | Materiales responde Q1 con R-MI-01 | `respuesta = bloqueante` y la justificación | «Interpretación no decide si ese faltante bloquea: le pregunta al dueño del conocimiento. La regla R-MI-01 de Lautaro dice que sin soporte no se evalúa. Entonces el sistema **no avanza** y no inventa el dato.» |
-| 03–04 | `· paso aplicado` | — | «Ahora simulamos que el cliente responde la aclaración. Esa respuesta es un dato de prueba.» |
-| **05** | INT-R11 de nuevo: P-01 listo y ficha FR-01 | `R11_se_cumple = TRUE`, `datos_confirmados` | «Con el soporte confirmado se cumple la regla de suficiencia y se genera la ficha. Solo esa regla puede habilitar el pedido.» |
-| 06–11 | `· paso aplicado` (×6) | — | «Se aplican las reglas de Materiales y de Manufacturabilidad sobre los dos casos.» |
-| **12** | Recorrido completo de CU1 | Las 5 filas | «Interpretación → ficha → Materiales: exposición baja, apto → Luciano: 1000 mm no entran en la cama de 400 → segmentar y reforzar. Decide el fabricante.» |
-| **13** | Recorrido completo de CU2 | Filas 2, 3, 4 y 7 | «Exterior expuesto: apto con condiciones. La condición de material la resuelve una regla de Luciano: PETG. Y quedan advertencias: el plazo obligatorio y la verificación estructural, con umbral pendiente.» |
-| **14** | Las restricciones del cliente filtran las alternativas | Columnas `decision` y `regla` | «La restricción obligatoria rechaza una alternativa y admite otra: fidelidad del logo, instalación no invasiva, tamaño fijo.» |
-| **15** | Trazabilidad de CU2 | Columnas `orden`, `submodulo`, `origen` | «Cada regla que se activó, en orden, de qué submódulo y de dónde sale: experto, propuesta o documental.» |
+| **01** | ¿Por qué P-01 todavía no puede evaluarse? | Columnas `faltantes`, `aclaraciones_pendientes`, `consultas` | «El pedido del Café Andino está pendiente: falta cómo se fija (D4). La aclaración A4 sigue sin respuesta y hay una consulta Q1 abierta a Materiales.» |
+| **02** | Materiales responde Q1 con R-MI-01 | `respuesta = bloqueante` y la justificación | «Interpretación no decide si ese faltante bloquea: le pregunta al dueño del conocimiento. La regla R-MI-01 de Lautaro dice que sin soporte no se evalúa. El sistema **no avanza** y no inventa el dato.» |
+| 03–11 | `· paso aplicado` | — | «Simulamos la respuesta del cliente (dato de prueba) y se aplican las reglas de los tres submódulos.» |
+| **12** | Recorrido completo de CU1 | Las 5 filas | «Interior: exposición baja, apto. Un metro no entra en la cama de 40 cm: segmentar y reforzar. Decide el fabricante.» |
+| **13** | Recorrido completo de CU2 | Filas 2 a 6 | «Exterior sin protección: exposición alta. No hay material elegido, y eso no frena: Materiales deja requisitos, la condición de revisar la marquesina y la verificación estructural → apto con condiciones. El PETG de Luciano cumple el requisito de material.» |
+| **14** | FR-07: Neón LED en bandera | Filas 1, 3 y 5 | «El alero se evaluó y no cubre. Neón y fuente de interior bajo la lluvia: restricción excluyente → no apto, con cada causa.» |
 
 Fin: `✓ Fin de la demo.` → pasar al Browser si sobra tiempo; si no, volver a las slides (slide 14).
 
 **Versión larga** (si piden más detalle o en una consulta posterior): `bash neo4j/demo.sh --completa`
-agrega el paso 04 (respuesta del cliente y cambio de etiqueta), el 08 (dictamen de Materiales), el 16 (insumo
-para el LLM explicador), el 17 (frame DatoFaltante con herencia), el 18 (reglas por origen), el 19 (todo lo
-`[PENDIENTE]`) y el 20 (control de integridad INT-R09).
+agrega el 04 (respuesta del cliente), el 05 (ficha FR-01), el 08 (detección y dictamen de Materiales para los tres
+casos), el 15 (filtro por restricciones del cliente), el 16 (trazabilidad de CU2), el 17 (insumo para el LLM), el 18
+(frame con herencia), el 19 (reglas por origen), el 20 (todo lo `[PENDIENTE]`) y el 21 (control INT-R09).
 
 ---
 
@@ -111,22 +108,18 @@ Para que se lea mejor: en el panel de estilo (abajo del grafo) elegir *caption* 
 
 ---
 
-## 5. Video de respaldo (2–3 min)
+## 5. Video de respaldo (1:31, sin audio)
 
-**Cómo grabarlo (Windows):** `Win + Alt + R` con la Xbox Game Bar (graba la ventana activa) o OBS Studio
-(captura de pantalla completa, 1920×1080, 30 fps). Micrófono activado; habla Matías. Grabar con
-`bash neo4j/demo.sh` (con pausas, para controlar el ritmo). Guardar como `salida/video_demo.mp4` y subirlo a
-Drive con enlace por si falla la conexión.
+`salida/video_demo.mp4` se genera con Remotion a partir de capturas reales del Neo4j Browser:
 
-| Tiempo | Pantalla | Locución |
-|---|---|---|
-| 0:00–0:15 | Slide 13 (título de la demo) | «Esta es la demo del modelo integrado del Grupo 11 en Neo4j. Vamos a ver un pedido que no avanza hasta que tiene la información necesaria, y cómo cruza los tres submódulos.» |
-| 0:15–0:25 | Terminal: `bash neo4j/demo.sh`, recarga | «El script recarga la base con los casos, sin ninguna regla aplicada todavía.» |
-| 0:25–0:50 | Paso 01 | «El pedido del Café Andino está pendiente: falta el soporte, la aclaración al cliente está abierta y hay una consulta al submódulo de Materiales.» |
-| 0:50–1:10 | Paso 02 | «Materiales responde con su regla R-MI-01: sin soporte no se evalúa. El faltante es bloqueante y el sistema no inventa el dato.» |
-| 1:10–1:25 | Pasos 03–05 | «Con la respuesta del cliente —un dato de prueba— se cumple la regla de suficiencia y se genera la ficha FR-01.» |
-| 1:25–1:50 | Paso 12 | «Recorrido completo: interior, apto; un metro no entra en la cama de 40 cm de la impresora, así que se recomienda segmentar y reforzar. Decide el fabricante.» |
-| 1:50–2:15 | Paso 13 | «En las letras corpóreas para exterior: apto con condiciones, material PETG por una regla de Luciano, segmentación letra por letra y dos advertencias pendientes de validar.» |
-| 2:15–2:35 | Paso 14 | «Las restricciones del cliente filtran: la fidelidad al logo rechaza engrosar el trazo; la instalación no invasiva rechaza perforar.» |
-| 2:35–2:55 | Paso 15 y Browser con el grafo de CU2 | «Y todo queda trazado: qué reglas se activaron, en qué orden y de dónde sale cada una. Este es el grafo del caso en Neo4j.» |
-| 2:55–3:00 | Slide 14 | «Gracias.» |
+```bash
+bash neo4j/cargar.sh            # el contenedor tiene que estar arriba
+cd video && npm install && npx playwright install chromium   # solo la primera vez
+npm run grabar                  # graba las capturas en video/public/rec (recarga la base 01→03 y aplica los pasos)
+npm run render                  # → salida/video_demo.mp4
+```
+
+Contenido: grafo de CU1 cargado → falta el soporte (A4, Q1) → dictamen apto de CU1 → alternativas de Luciano →
+**CU2: apto con condiciones, el requisito de material lo cumple el PETG** → **FR-07: no apto con cada causa** →
+trazabilidad (17 reglas de CU1) → grafo final de CU1. Si se usa en clase, Matías narra encima con el texto de la
+sección 1.

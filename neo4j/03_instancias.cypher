@@ -9,6 +9,7 @@
 //   CU1   «Café Andino» = P-01 del PI2 de Matías, al cierre de la ITERACIÓN 2 (la Q1 todavía sin responder)
 //   CU2   «Letras corpóreas exterior» = P-02 / FR-02 del PI2 de Matías, al cierre de la iteración 2 (listo)
 //   L-C1 / L-C2 / L-C3  casos del PI2 de Luciano (entrada directa al submódulo de rediseño)
+//   FR-07 caso 2 del PI2 de Lautaro: Neón LED en bandera (entrada directa al submódulo de Materiales)
 // Las reglas de Materiales y Manufacturabilidad NO se precargan: se ejecutan en 04_consultas.cypher.
 
 // =====================================================================================
@@ -34,8 +35,15 @@ MERGE (t:TecnologiaIluminacion:Instancia {id:'TEC-NEON'}) SET t.caso='BASE', t.f
 MERGE (t:TecnologiaIluminacion:Instancia {id:'TEC-RETRO'}) SET t.caso='BASE', t.frame='Retroiluminado', t.nombre='Retroiluminado';
 
 // Materiales FDM (PI2 Luciano R7: PLA no apto intemperie, PETG apto)
-MERGE (m:Material:Instancia {id:'MAT-PLA'}) SET m.caso='BASE', m.frame='PLA', m.nombre='PLA', m.apto_exterior=false, m.fuente='Propiedades térmicas FDM (PI2 Luciano R7)';
-MERGE (m:Material:Instancia {id:'MAT-PETG'}) SET m.caso='BASE', m.frame='PETG', m.nombre='PETG', m.apto_exterior=true, m.fuente='Propiedades térmicas FDM (PI2 Luciano R7)';
+MERGE (m:Material:Instancia {id:'MAT-PLA'}) SET m.caso='BASE', m.frame='PLA', m.nombre='PLA', m.funcion=['cuerpo'], m.apto_exterior='no', m.fuente='Propiedades térmicas FDM (PI2 Luciano R7)';
+MERGE (m:Material:Instancia {id:'MAT-PETG'}) SET m.caso='BASE', m.frame='PETG', m.nombre='PETG', m.funcion=['cuerpo'], m.apto_exterior='si', m.fuente='Propiedades térmicas FDM (PI2 Luciano R7)';
+
+MERGE (m:Material:Instancia {id:'MAT-ACR'}) SET m.caso='BASE', m.frame='Acrilico', m.nombre='Acrílico', m.funcion=['frente','difusor','placa_base'],
+    m.apto_exterior='a_validar', m.pendiente='[PENDIENTE: resistencia UV y térmica según fichas técnicas]', m.fuente='PI2 Lautaro (alcance M2)';
+
+// Agentes ambientales (PI2 Lautaro C7)
+UNWIND ['UV', 'agua', 'temperatura', 'viento'] AS a
+MERGE (n:AgenteAmbiental:Instancia {id:'AG-' + a}) SET n.caso='BASE', n.frame='AgenteAmbiental', n.nombre=a;
 
 // Sistema de fijación de los casos de Luciano
 MERGE (f:SistemaFijacion:Instancia {id:'FIJ-CINTA'})
@@ -178,7 +186,7 @@ SET d.caso='CU2', d.frame='Dato', d.atributo='iluminacion', d.categoria='product
     d.nota='Aportado por la referencia RV2; descartado al resolverse K1 (M15)';
 MERGE (d:Dato:DatoConfirmado:Instancia {id:'D11'})
 SET d.caso='CU2', d.frame='DatoConfirmado', d.atributo='soporte_y_montaje', d.categoria='instalacion', d.valor='sobre marquesina a 4 m de altura',
-    d.soporte='marquesina', d.montaje='sobre_marquesina', d.altura_m=4, d.origen='respuesta_a_aclaracion', d.estado='confirmado';
+    d.soporte='marquesina', d.montaje='sobre_estructura', d.altura_m=4, d.origen='respuesta_a_aclaracion', d.estado='confirmado';
 
 MATCH (e:ExpresionCliente {id:'E6'}), (d:Dato {id:'D6'}) MERGE (e)-[:APORTA]->(d);
 MATCH (e:ExpresionCliente {id:'E6'}), (d:Dato {id:'D7'}) MERGE (e)-[:APORTA]->(d);
@@ -277,6 +285,37 @@ MATCH (c:Cartel {id:'CAR-L3'}), (g:Geometria {id:'GEO-L3'}), (f:SistemaFijacion 
 MERGE (c)-[:TIENE]->(g) MERGE (c)-[:SE_FIJA_CON]->(f);
 MATCH (cl:Cliente {id:'CLI-L3'}), (r:RestriccionCliente {id:'RCL-L3'}), (c:Cartel {id:'CAR-L3'})
 MERGE (cl)-[:IMPONE]->(r) MERGE (r)-[:CONDICIONA]->(c);
+
+// =====================================================================================
+// FR-07 — caso 2 del PI2 de Lautaro: cartel de Neón LED doble faz en bandera (entrada directa a Materiales)
+// Pedido armado en el PI2 de Lautaro a partir de los casos típicos y límite de su cuaderno (bandera, fuente sin acceso).
+// La ficha llega ya interpretada: se cargan Cartel, Entorno, Soporte y componentes tal como los describe el PI2.
+// =====================================================================================
+MERGE (f:FichaRequerimientos:Instancia {id:'FR-07'}) SET f.caso='FR-07', f.frame='FichaRequerimientos',
+  f.origen='PI2 Lautaro, caso 2 (pedido armado para el informe)';
+MERGE (c:Cartel:Instancia {id:'CAR-FR-07'})
+SET c.caso='FR-07', c.frame='Cartel', c.desde_ficha=true, c.tipo_cartel='NeonLED', c.lleva_luz=true, c.doble_faz=true,
+    c.dimension_maxima_mm=1200, c.dimensiones='1,2 × 0,8 m', c.montaje='bandera', c.altura_m=3,
+    c.preferencia='reutilizar el Neón LED y la fuente de un cartel de interior';
+MERGE (en:Entorno:Instancia {id:'ENT-FR-07'})
+SET en.caso='FR-07', en.frame='Entorno', en.tipo='exterior', en.proteccion_superior='alero', en.alcance_proteccion='no_cubre',
+    en.humedad='normal', en.sol_directo=false, en.detalle='alero de 0,4 m; el cartel sobresale 1,0 m sobre la vereda';
+MERGE (so:Soporte:Instancia {id:'SOP-FR-07'})
+SET so.caso='FR-07', so.frame='Soporte', so.tipo='mamposteria', so.capacidad_relativa='no_baja', so.estado='no_verificado',
+    so.estructura_portante='desconocido';
+MERGE (fj:SistemaFijacion:Instancia {id:'FIJ-FR-07'})
+SET fj.caso='FR-07', fj.frame='SistemaFijacion', fj.pendiente='[PENDIENTE: sistema de fijación a definir (lo deriva R-MI-06)]';
+MERGE (ce:ComponenteElectrico:Instancia {id:'CE-FR-07-NEON'})
+SET ce.caso='FR-07', ce.frame='ComponenteElectrico', ce.tipo='tira_neon_led', ce.uso_declarado='interior', ce.grado_ip=null;
+MERGE (ce:ComponenteElectrico:Instancia {id:'CE-FR-07-FUENTE'})
+SET ce.caso='FR-07', ce.frame='ComponenteElectrico', ce.tipo='fuente', ce.uso_declarado='interior', ce.grado_ip=null,
+    ce.ubicacion='interna_cerrada', ce.accesible=false;
+MATCH (f:FichaRequerimientos {id:'FR-07'}), (c:Cartel {id:'CAR-FR-07'}), (en:Entorno {id:'ENT-FR-07'}),
+      (so:Soporte {id:'SOP-FR-07'}), (fj:SistemaFijacion {id:'FIJ-FR-07'}), (acr:Material {id:'MAT-ACR'})
+MERGE (f)-[:DESCRIBE]->(c) MERGE (c)-[:SE_INSTALA_EN]->(en) MERGE (c)-[:SE_FIJA_CON]->(fj) MERGE (fj)-[:SE_ANCLA_EN]->(so)
+MERGE (c)-[:UTILIZA {funcion:'placa_base'}]->(acr);
+MATCH (c:Cartel {id:'CAR-FR-07'}), (ce:ComponenteElectrico {caso:'FR-07'}) MERGE (c)-[:UTILIZA]->(ce);
+MATCH (f:FichaRequerimientos {id:'FR-07'}), (s:Submodulo {id:'SM-MAT'}) MERGE (f)-[:ALIMENTA]->(s);
 
 // =====================================================================================
 // Pertenencia a categorías, INSTANCIA_DE y traza de las reglas de Interpretación ya aplicadas

@@ -227,10 +227,10 @@
       ],
       "foco": {
         "indice": 53,
-        "x": 0.5841402053833008,
-        "y": 0.4137766982569839,
-        "w": 0.18680191040039062,
-        "h": 0.5637989853367661
+        "x": 0.5368044376373291,
+        "y": 0.3105283563787287,
+        "w": 0.1613156795501709,
+        "h": 0.6670473272150214
       }
     },
     {
@@ -1383,9 +1383,9 @@
       ]
     },
     {
-      "id": "traza",
-      "sm": "COM",
-      "rotulo": "Trazabilidad: las 17 reglas que se activaron, en orden y con su origen",
+      "id": "cu2",
+      "sm": "MAT",
+      "rotulo": "CU2: apto con condiciones; el requisito de material lo cumple el PETG",
       "capturas": [
         {
           "archivo": "0337.jpg",
@@ -1745,214 +1745,214 @@
         },
         {
           "archivo": "0426.jpg",
-          "frames": 24
+          "frames": 1
         },
         {
           "archivo": "0427.jpg",
-          "frames": 60
+          "frames": 1
         },
         {
           "archivo": "0428.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0429.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0430.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0431.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0432.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0433.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0434.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0435.jpg",
-          "frames": 2
+          "frames": 24
         },
         {
           "archivo": "0436.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0437.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0438.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0439.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0440.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0441.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0442.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0443.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0444.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0445.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0446.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0447.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0448.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0449.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0450.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0451.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0452.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0453.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0454.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0455.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0456.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0457.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0458.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0459.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0460.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0461.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0462.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0463.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0464.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0465.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0466.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0467.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0468.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0469.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0470.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0471.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0472.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0473.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0474.jpg",
-          "frames": 2
-        },
-        {
-          "archivo": "0475.jpg",
-          "frames": 75
+          "frames": 210
         }
       ]
     },
     {
-      "id": "grafo_final",
-      "sm": "COM",
-      "rotulo": "El mismo caso después de las reglas: Interpretación, Materiales y Manufacturabilidad",
+      "id": "fr07",
+      "sm": "MAT",
+      "rotulo": "FR-07: Neón en bandera → no apto, con cada restricción y su causa",
       "capturas": [
         {
-          "archivo": "0476.jpg",
+          "archivo": "0437.jpg",
           "frames": 12
+        },
+        {
+          "archivo": "0438.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0439.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0440.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0441.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0442.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0443.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0444.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0445.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0446.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0447.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0448.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0449.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0450.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0451.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0452.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0453.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0454.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0455.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0456.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0457.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0458.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0459.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0460.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0461.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0462.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0463.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0464.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0465.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0466.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0467.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0468.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0469.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0470.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0471.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0472.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0473.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0474.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0475.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0476.jpg",
+          "frames": 1
         },
         {
           "archivo": "0477.jpg",
@@ -2092,15 +2092,22 @@
         },
         {
           "archivo": "0511.jpg",
-          "frames": 1
+          "frames": 24
         },
         {
           "archivo": "0512.jpg",
-          "frames": 1
-        },
+          "frames": 210
+        }
+      ]
+    },
+    {
+      "id": "traza",
+      "sm": "COM",
+      "rotulo": "Trazabilidad: las 17 reglas que se activaron, en orden y con su origen",
+      "capturas": [
         {
           "archivo": "0513.jpg",
-          "frames": 1
+          "frames": 12
         },
         {
           "archivo": "0514.jpg",
@@ -2112,67 +2119,778 @@
         },
         {
           "archivo": "0516.jpg",
-          "frames": 24
+          "frames": 1
         },
         {
           "archivo": "0517.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0518.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0519.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0520.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0521.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0522.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0523.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0524.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0525.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0526.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0527.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0528.jpg",
-          "frames": 2
+          "frames": 1
         },
         {
           "archivo": "0529.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0530.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0531.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0532.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0533.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0534.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0535.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0536.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0537.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0538.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0539.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0540.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0541.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0542.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0543.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0544.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0545.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0546.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0547.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0548.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0549.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0550.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0551.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0552.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0553.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0554.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0555.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0556.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0557.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0558.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0559.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0560.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0561.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0562.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0563.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0564.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0565.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0566.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0567.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0568.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0569.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0570.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0571.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0572.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0573.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0574.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0575.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0576.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0577.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0578.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0579.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0580.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0581.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0582.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0583.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0584.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0585.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0586.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0587.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0588.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0589.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0590.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0591.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0592.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0593.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0594.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0595.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0596.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0597.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0598.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0599.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0600.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0601.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0602.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0603.jpg",
+          "frames": 60
+        },
+        {
+          "archivo": "0604.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0605.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0606.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0607.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0608.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0609.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0610.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0611.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0612.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0613.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0614.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0615.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0616.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0617.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0618.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0619.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0620.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0621.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0622.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0623.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0624.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0625.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0626.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0627.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0628.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0629.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0630.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0631.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0632.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0633.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0634.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0635.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0636.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0637.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0638.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0639.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0640.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0641.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0642.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0643.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0644.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0645.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0646.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0647.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0648.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0649.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0650.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0651.jpg",
+          "frames": 75
+        }
+      ]
+    },
+    {
+      "id": "grafo_final",
+      "sm": "COM",
+      "rotulo": "El mismo caso después de las reglas: Interpretación, Materiales y Manufacturabilidad",
+      "capturas": [
+        {
+          "archivo": "0652.jpg",
+          "frames": 12
+        },
+        {
+          "archivo": "0653.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0654.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0655.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0656.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0657.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0658.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0659.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0660.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0661.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0662.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0663.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0664.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0665.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0666.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0667.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0668.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0669.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0670.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0671.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0672.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0673.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0674.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0675.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0676.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0677.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0678.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0679.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0680.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0681.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0682.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0683.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0684.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0685.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0686.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0687.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0688.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0689.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0690.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0691.jpg",
+          "frames": 1
+        },
+        {
+          "archivo": "0692.jpg",
+          "frames": 24
+        },
+        {
+          "archivo": "0693.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0694.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0695.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0696.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0697.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0698.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0699.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0700.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0701.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0702.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0703.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0704.jpg",
+          "frames": 2
+        },
+        {
+          "archivo": "0705.jpg",
           "frames": 0
         }
       ],
       "foco": {
         "indice": 53,
-        "x": 0.2870187282562256,
-        "y": 0.44292412960168087,
-        "w": 0.1604764938354492,
-        "h": 0.5346515539920691
+        "x": 0.3515942573547363,
+        "y": 0.4615153919566761,
+        "w": 0.18625984191894532,
+        "h": 0.5160603841145833
       }
     }
   ]

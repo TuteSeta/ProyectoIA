@@ -1,6 +1,6 @@
 # 03 — Resultados reales de las consultas en Neo4j
 
-Ejecutado el 03/10/2026 23:26 contra `neo4j:5.21.0` (contenedor `neo4j-carteleria`).
+Ejecutado el 04/10/2026 14:05 contra `neo4j:5.21.0` (contenedor `neo4j-carteleria`).
 Procedimiento: `bash neo4j/cargar.sh --reset --base` (borra la base y carga 01→03) y luego cada bloque
 `// @paso` de `neo4j/04_consultas.cypher`, en orden, con `cypher-shell --format plain`.
 Las salidas de abajo se copiaron tal cual las devolvió Neo4j (las sentencias de escritura sin `RETURN`
@@ -50,14 +50,14 @@ WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act
 MATCH (r:Regla {id:'R-MI-01'})
 MERGE (ev)-[a:ACTIVO {paso:'Q'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = q.id
 RETURN q.id AS consulta, d.id AS dato, d.atributo AS atributo, q.respuesta AS respuesta,
-       'R-MI-01: si falta entorno, soporte o dimensiones, no evaluar y pedir el dato' AS justificacion;
+       'R-MI-01: si falta entorno, soporte / método o dimensiones, no evaluar y pedir el dato' AS justificacion;
 ```
 
 </details>
 
 ```text
 consulta, dato, atributo, respuesta, justificacion
-"Q1", "D4", "soporte_y_montaje", "bloqueante", "R-MI-01: si falta entorno, soporte o dimensiones, no evaluar y pedir el dato"
+"Q1", "D4", "soporte_y_montaje", "bloqueante", "R-MI-01: si falta entorno, soporte / método o dimensiones, no evaluar y pedir el dato"
 ```
 
 ## Paso 03 — INT-R11 evalúa la suficiencia de P-01 (no se cumple)
@@ -198,7 +198,7 @@ RETURN f.id AS ficha, count(d) AS advertencias_creadas_por_R12;
 pedido, R11_se_cumple, estado, sin_cubrir, faltantes_que_bloquean
 "P-01", TRUE, "listo_para_evaluacion", [], []
 ficha_creada, pedido, datos_confirmados, necesidades_funcionales
-"FR-01", "P-01", ["D4 soporte_y_montaje = pared de mampostería, adosado", "D5 largo = ≈ 1 m", "D3 entorno = interior", "D2 contenido_texto = Café Andino"], ["NF1: visibilidad y efecto nocturno; aspecto similar a RV1"]
+"FR-01", "P-01", ["D5 largo = ≈ 1 m", "D3 entorno = interior", "D2 contenido_texto = Café Andino", "D4 soporte_y_montaje = pared de mampostería, adosado"], ["NF1: visibilidad y efecto nocturno; aspecto similar a RV1"]
 ficha, advertencias_creadas_por_R12
 "FR-01", 0
 ```
@@ -210,8 +210,9 @@ ficha, advertencias_creadas_por_R12
 <details><summary>Consulta</summary>
 
 ```cypher
-// Esperado: CAR-P-01 (1000 mm, interior, mampostería, sin tecnología definida) y CAR-P-02 (corpóreo, con luz,
-// 3000 mm, exterior, sobre marquesina a 4 m). La tecnología queda [PENDIENTE] (demonio del frame Cartel).
+// Esperado: CAR-P-01 (1000 mm, interior, mampostería adosado, sin tecnología definida) y CAR-P-02 (corpóreo, con luz,
+// 3000 mm, exterior, sobre estructura: marquesina a 4 m). Material y componentes NO se crean: la ficha no los define
+// (los trata R-MI-13). Los slots sin dato toman el valor por defecto de su faceta (frames ENTORNO y SOPORTE de Lautaro).
 MATCH (f:FichaRequerimientos)-[:CORRESPONDE_A]->(p:Pedido)
 OPTIONAL MATCH (f)-[:REGISTRA]->(d:DatoConfirmado)
 WITH f, p, collect(d) AS ds
@@ -235,17 +236,17 @@ SET g:Instancia:Inferido, g.caso = p.caso, g.frame = 'Geometria', g.dimension_ma
 MERGE (c)-[:TIENE]->(g)
 MERGE (en:Entorno {id:'ENT-' + p.id})
 SET en:Instancia:Inferido, en.caso = p.caso, en.frame = 'Entorno', en.tipo = ent,
-    en.proteccion = coalesce(en.proteccion, 'no_informada'), en.condicion_especial = coalesce(en.condicion_especial, 'no_informada')
+    en.proteccion_superior = coalesce(en.proteccion_superior, 'ninguna'), en.humedad = coalesce(en.humedad, 'normal'),
+    en.sol_directo = coalesce(en.sol_directo, false), en.valores_por_defecto = ['proteccion_superior', 'humedad', 'sol_directo']
 MERGE (c)-[:SE_INSTALA_EN]->(en)
 FOREACH (x IN CASE WHEN inst.soporte IS NULL THEN [] ELSE [inst] END |
-  MERGE (so:Soporte {id:'SOP-' + p.id}) SET so:Instancia:Inferido, so.caso = p.caso, so.frame = 'Soporte', so.tipo = x.soporte
+  MERGE (so:Soporte {id:'SOP-' + p.id})
+  SET so:Instancia:Inferido, so.caso = p.caso, so.frame = 'Soporte', so.tipo = x.soporte,
+      so.capacidad_relativa = CASE x.soporte WHEN 'placa_de_yeso' THEN 'baja' WHEN 'mamposteria' THEN 'no_baja' ELSE null END,
+      so.estado = coalesce(so.estado, 'no_verificado'), so.estructura_portante = coalesce(so.estructura_portante, 'desconocido')
   MERGE (fj:SistemaFijacion {id:'FIJ-' + p.id})
   SET fj:Instancia:Inferido, fj.caso = p.caso, fj.frame = 'SistemaFijacion', fj.pendiente = '[PENDIENTE: sistema de fijación a definir]'
-  MERGE (c)-[:SE_FIJA_CON]->(fj) MERGE (fj)-[:SOBRE]->(so))
-FOREACH (x IN CASE WHEN luz = 'si' THEN [1] ELSE [] END |
-  MERGE (ce:ComponenteElectrico {id:'CE-' + p.id})
-  SET ce:Instancia:Inferido, ce.caso = p.caso, ce.frame = 'ComponenteElectrico', ce.tipo = 'fuente y tiras LED', ce.grado_ip = null
-  MERGE (c)-[:UTILIZA]->(ce))
+  MERGE (c)-[:SE_FIJA_CON]->(fj) MERGE (fj)-[:SE_ANCLA_EN]->(so))
 WITH f, p, c
 OPTIONAL MATCH (f)-[:PRESERVA]->(r:RestriccionCliente)
 FOREACH (x IN CASE WHEN r IS NULL THEN [] ELSE [r] END | MERGE (x)-[:CONDICIONA]->(c))
@@ -259,7 +260,8 @@ RETURN f.id AS ficha, c.id AS cartel, c.tipo_cartel AS tipo, c.lleva_luz AS llev
        c.montaje AS montaje, c.altura_m AS altura_m, [(c)-[:SE_INSTALA_EN]->(e) | e.tipo][0] AS entorno
 ORDER BY ficha;
 // =====================================================================================
-// PARTE A — Materiales e instalación (Lautaro) — [PENDIENTE: PI2 Lautaro]
+// PARTE A — Materiales e instalación (Lautaro, PI2)
+// Orden de disparo del PI2: R-MI-01 → exposición (R-MI-02/08/09) → detección (R-MI-03…07, 13, 14) → dictamen (12 > 11 > 10)
 // =====================================================================================
 ```
 
@@ -268,133 +270,190 @@ ORDER BY ficha;
 ```text
 ficha, cartel, tipo, lleva_luz, dim_mm, montaje, altura_m, entorno
 "FR-01", "CAR-P-01", NULL, NULL, 1000, "adosado", NULL, "interior"
-"FR-02", "CAR-P-02", "corporeo", TRUE, 3000, "sobre_marquesina", 4, "exterior"
+"FR-02", "CAR-P-02", "corporeo", TRUE, 3000, "sobre_estructura", 4, "exterior"
 ```
 
-## Paso 07 — R-MI-01 datos mínimos + interpretación de la exposición (R-MI-GEN / R-MI-02)
+## Paso 07 — R-MI-01 datos mínimos + interpretación de la exposición (R-MI-08 → R-MI-02 / R-MI-09 / R-MI-GEN)
 
-*Caso:* CU1+CU2 · *Modo en demo.sh:* `silencio` · *Ejecución:* OK
+*Caso:* CU1+CU2+FR-07 · *Modo en demo.sh:* `silencio` · *Ejecución:* OK
 
 <details><summary>Consulta</summary>
 
 ```cypher
-// Esperado: CU1 interior → exposición baja (regla general §6); CU2 exterior sin alero/nicho informado → alta (R-MI-02).
-// Las excepciones que no se pueden verificar quedan como advertencias del dictamen.
+// Esperado: CU1 interior → baja (R-MI-GEN); CU2 exterior sin protección → alta (R-MI-02);
+// FR-07 exterior con alero que NO cubre → R-MI-08 se evalúa y no aplica → alta (R-MI-02).
 MATCH (c:Cartel {desde_ficha:true})-[:SE_INSTALA_EN]->(en:Entorno)
-OPTIONAL MATCH (c)-[:SE_FIJA_CON]->(:SistemaFijacion)-[:SOBRE]->(so:Soporte)
+OPTIONAL MATCH (c)-[:SE_FIJA_CON]->(:SistemaFijacion)-[:SE_ANCLA_EN]->(so:Soporte)
 WITH c, en, [x IN [CASE WHEN en.tipo IS NULL THEN 'entorno' END,
-                   CASE WHEN so IS NULL THEN 'soporte' END,
+                   CASE WHEN so IS NULL OR c.montaje IS NULL THEN 'soporte / método' END,
                    CASE WHEN c.dimension_maxima_mm IS NULL THEN 'dimensiones' END] WHERE x IS NOT NULL] AS faltan
 SET c.datos_minimos_ok = (size(faltan) = 0), c.faltan_minimos = faltan
 WITH c, en, faltan,
      CASE WHEN size(faltan) > 0 THEN [null, null]
-          WHEN en.tipo = 'interior' AND en.condicion_especial IN ['ninguna', 'no_informada'] THEN ['baja', 'R-MI-GEN']
-          WHEN en.tipo = 'interior' THEN ['media o alta', 'R-MI-09']
-          WHEN en.proteccion IN ['alero', 'nicho'] THEN ['a reducir (magnitud a validar)', 'R-MI-08']
+          WHEN en.tipo = 'interior' AND en.humedad = 'alta' AND en.sol_directo THEN ['alta', 'R-MI-09']
+          WHEN en.tipo = 'interior' AND (en.humedad = 'alta' OR en.sol_directo) THEN ['media', 'R-MI-09']
+          WHEN en.tipo = 'interior' THEN ['baja', 'R-MI-GEN']
+          WHEN en.proteccion_superior IN ['alero', 'nicho'] AND en.alcance_proteccion = 'cubre' THEN ['media', 'R-MI-08']
           ELSE ['alta', 'R-MI-02'] END AS expo
 SET en.nivel_exposicion = expo[0], en.regla_exposicion = expo[1]
 MERGE (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
 SET dic:Instancia:Inferido, dic.caso = c.caso, dic.frame = 'DictamenAdecuacion'
 MERGE (dic)-[:EVALUA]->(c)
-FOREACH (_ IN CASE WHEN en.tipo = 'interior' AND en.condicion_especial = 'no_informada' THEN [1] ELSE [] END |
-  MERGE (av:Advertencia {id:'AV-EX02-' + c.caso})
-  SET av:Instancia:Inferido, av.caso = c.caso, av.frame = 'Advertencia', av.motivo = 'excepcion_no_verificable',
-      av.texto = 'EX-02: no se informó humedad alta ni sol directo; se aplica la regla general (interior = exposición baja)'
-  MERGE (dic)-[:INCLUYE {regla:'R-MI-GEN'}]->(av))
-FOREACH (_ IN CASE WHEN en.tipo = 'exterior' AND en.proteccion = 'no_informada' THEN [1] ELSE [] END |
-  MERGE (av:Advertencia {id:'AV-EX01-' + c.caso})
-  SET av:Instancia:Inferido, av.caso = c.caso, av.frame = 'Advertencia', av.motivo = 'excepcion_no_verificable',
-      av.texto = 'EX-01: no se informó alero ni nicho; se evalúa como exterior expuesto (R-MI-08 no aplica)'
-  MERGE (dic)-[:INCLUYE {regla:'R-MI-02'}]->(av))
+// Excepción evaluada: se registra aunque no aplique (PI2 Lautaro, frame EXCEPCIÓN)
+FOREACH (_ IN CASE WHEN en.tipo = 'exterior' AND en.proteccion_superior IN ['alero', 'nicho'] THEN [1] ELSE [] END |
+  MERGE (ex:Excepcion {id:'EXC-' + c.caso})
+  SET ex:Instancia:Inferido, ex.caso = c.caso, ex.frame = 'Excepcion', ex.tipo = en.proteccion_superior,
+      ex.aplica = (en.alcance_proteccion = 'cubre'), ex.condicion = coalesce(en.detalle, en.proteccion_superior),
+      ex.efecto = CASE WHEN en.alcance_proteccion = 'cubre' THEN 'exposición media' ELSE 'no baja la exposición: la protección no cubre al cartel' END
+  MERGE (ex)-[:AJUSTA {regla:'R-MI-08', aplica:(en.alcance_proteccion = 'cubre')}]->(en))
 WITH c, en, faltan, expo
-MERGE (ev:Evaluacion {id:'EV-' + c.caso})
-WITH c, en, faltan, ev, [x IN ['R-MI-01', expo[1]] WHERE x IS NOT NULL] AS reglas, COUNT { (ev)-[:ACTIVO]->() } AS n_act
+MERGE (ev:Evaluacion {id:'EV-' + c.caso}) ON CREATE SET ev:Instancia:Inferido, ev.caso = c.caso, ev.frame = 'Evaluacion'
+WITH c, en, faltan, ev,
+     [x IN ['R-MI-01', CASE WHEN en.proteccion_superior IN ['alero', 'nicho'] AND expo[1] <> 'R-MI-08' THEN 'R-MI-08' END, expo[1]] WHERE x IS NOT NULL] AS reglas,
+     COUNT { (ev)-[:ACTIVO]->() } AS n_act
 UNWIND range(0, size(reglas) - 1) AS i
 MATCH (r:Regla {id: reglas[i]})
 MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + i + 1, a.submodulo = 'MAT', a.sobre = c.id
 WITH DISTINCT c, en, faltan
 RETURN c.caso AS caso, c.id AS cartel, faltan AS faltan_datos_minimos, en.tipo AS entorno,
-       en.nivel_exposicion AS exposicion, en.regla_exposicion AS regla
+       en.proteccion_superior AS proteccion, en.nivel_exposicion AS exposicion, en.regla_exposicion AS regla
 ORDER BY caso;
 ```
 
 </details>
 
 ```text
-caso, cartel, faltan_datos_minimos, entorno, exposicion, regla
-"CU1", "CAR-P-01", [], "interior", "baja", "R-MI-GEN"
-"CU2", "CAR-P-02", [], "exterior", "alta", "R-MI-02"
+caso, cartel, faltan_datos_minimos, entorno, proteccion, exposicion, regla
+"CU1", "CAR-P-01", [], "interior", "ninguna", "baja", "R-MI-GEN"
+"CU2", "CAR-P-02", [], "exterior", "ninguna", "alta", "R-MI-02"
+"FR-07", "CAR-FR-07", [], "exterior", "alero", "alta", "R-MI-02"
 ```
 
-## Paso 08 — Materiales emite el dictamen (R-MI-03, R-MI-04, R-MI-06, R-MI-10 / R-MI-11)
+## Paso 08 — Detección de Materiales: R-MI-03, R-MI-07, R-MI-13, R-MI-14, R-MI-06 (se acumulan)
 
-*Caso:* CU1+CU2 · *Modo en demo.sh:* `extra` · *Ejecución:* OK
+*Caso:* CU1+CU2+FR-07 · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 
 <details><summary>Consulta</summary>
 
 ```cypher
-// Esperado: CU1 apto (R-MI-10). CU2 apto con condiciones (R-MI-11): protección IP de lo eléctrico,
-// material apto exterior y advertencia de verificación estructural (umbral R-MI-06 [PENDIENTE]).
-// R-MI-03: exposición alta y componente eléctrico sin protección informada
+// Esperado: CU1 nada. CU2 (sin material ni componentes definidos): RQ de cuerpo/frente y de componentes (R-MI-13),
+// condición «fuente accesible» (R-MI-13), condición «relevar la marquesina» (R-MI-14), verificación estructural (R-MI-06).
+// FR-07: restricción eléctrica excluyente (R-MI-03), restricción de mantenimiento corregible (R-MI-07), verificación (R-MI-06).
+// R-MI-03: exposición alta y componente eléctrico declarado de interior o sin grado IP (grado exigido: a validar)
 MATCH (c:Cartel {desde_ficha:true, datos_minimos_ok:true})-[:SE_INSTALA_EN]->(en:Entorno {nivel_exposicion:'alta'}),
       (c)-[:UTILIZA]->(ce:ComponenteElectrico), (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
-WHERE ce.grado_ip IS NULL
-MERGE (k:Conflicto {id:'CONF-IP-' + c.caso})
-SET k:Instancia:Inferido, k.caso = c.caso, k.frame = 'Conflicto', k.tipo = 'ComponenteEntorno', k.origen = 'instalacion',
-    k.estado = coalesce(k.estado, 'Abierto'), k.resoluble_con_condicion = true,
-    k.condicion = 'Componentes eléctricos con protección contra agua [PENDIENTE: grado IP exigido, IEC 60529]'
+WHERE ce.uso_declarado = 'interior' OR ce.grado_ip IS NULL
+MERGE (k:Conflicto {id:'RES-ELEC-' + c.caso})
+SET k:Instancia:Inferido, k.caso = c.caso, k.frame = 'Conflicto', k.tipo = 'Electrica', k.origen = 'instalacion',
+    k.severidad = 'excluyente', k.estado = 'Abierto',
+    k.detalle = 'Componentes de interior, sin protección contra agua, con exposición alta [grado IP exigido: a validar, IEC 60529]'
+MERGE (k)-[:CAUSADO_POR {regla:'R-MI-03'}]->(ce)
 MERGE (k)-[:CAUSADO_POR {regla:'R-MI-03'}]->(en)
-MERGE (dic)-[:REGISTRA {regla:'R-MI-03'}]->(k)
-WITH c
+MERGE (dic)-[:REUNE {regla:'R-MI-03'}]->(k)
+WITH DISTINCT c
 MERGE (ev:Evaluacion {id:'EV-' + c.caso})
 WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'R-MI-03'})
 MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = c.id;
-// R-MI-04: exposición alta y material no indicado (o todavía no definido) para exterior/UV
+// R-MI-04: exposición alta y material definido no apto para exterior (ningún caso cargado la dispara)
 MATCH (c:Cartel {desde_ficha:true, datos_minimos_ok:true})-[:SE_INSTALA_EN]->(en:Entorno {nivel_exposicion:'alta'}),
-      (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
-OPTIONAL MATCH (c)-[:UTILIZA]->(m:Material)
-WITH c, en, dic, m WHERE m IS NULL OR m.apto_exterior = false
-MERGE (k:Conflicto {id:'CONF-MAT-' + c.caso})
+      (c)-[:UTILIZA]->(m:Material {apto_exterior:'no'}), (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
+MERGE (k:Conflicto {id:'RES-MAT-' + c.caso})
 SET k:Instancia:Inferido, k.caso = c.caso, k.frame = 'Conflicto', k.tipo = 'MaterialEntorno', k.origen = 'instalacion',
-    k.estado = coalesce(k.estado, 'Abierto'), k.resoluble_con_condicion = true,
-    k.condicion = 'Material indicado para exterior y radiación UV (la ficha no define material)'
-MERGE (k)-[:CAUSADO_POR {regla:'R-MI-04'}]->(en)
-MERGE (dic)-[:REGISTRA {regla:'R-MI-04'}]->(k)
+    k.severidad = 'excluyente', k.estado = 'Abierto', k.detalle = m.nombre + ' no apto para exterior'
+MERGE (k)-[:CAUSADO_POR {regla:'R-MI-04'}]->(m)
+MERGE (dic)-[:REUNE {regla:'R-MI-04'}]->(k);
+// R-MI-07: fuente interna cerrada y sin acceso → restricción de mantenimiento corregible + condición
+MATCH (c:Cartel {desde_ficha:true, datos_minimos_ok:true})-[:UTILIZA]->(ce:ComponenteElectrico {tipo:'fuente', ubicacion:'interna_cerrada', accesible:false}),
+      (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
+MERGE (k:Conflicto {id:'RES-MANT-' + c.caso})
+SET k:Instancia:Inferido, k.caso = c.caso, k.frame = 'Conflicto', k.tipo = 'Mantenimiento', k.origen = 'instalacion',
+    k.severidad = 'corregible', k.estado = 'Abierto', k.detalle = 'Fuente cerrada dentro de la caja, sin acceso'
+MERGE (ci:CondicionInstalacion {id:'CI-FUENTE-' + c.caso})
+SET ci:Instancia:Inferido, ci.caso = c.caso, ci.frame = 'CondicionInstalacion', ci.regla_origen = 'R-MI-07',
+    ci.descripcion = 'Fuente accesible sin desmontar el cartel y protegida'
+MERGE (k)-[:CAUSADO_POR {regla:'R-MI-07'}]->(ce)
+MERGE (k)-[:SE_RESUELVE_CON {regla:'R-MI-07'}]->(ci)
+MERGE (dic)-[:REUNE {regla:'R-MI-07'}]->(k)
+MERGE (dic)-[:IMPONE {regla:'R-MI-07'}]->(ci)
 WITH c
 MERGE (ev:Evaluacion {id:'EV-' + c.caso})
-WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'R-MI-04'})
+WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'R-MI-07'})
 MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = c.id;
-// R-MI-06: bandera o exterior en altura → verificación estructural (el umbral no está relevado: queda como advertencia)
+// R-MI-13: material / componentes / fuente no definidos → no bloquea; requisitos según la exposición
 MATCH (c:Cartel {desde_ficha:true, datos_minimos_ok:true})-[:SE_INSTALA_EN]->(en:Entorno), (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
-WHERE c.montaje = 'bandera' OR (en.tipo = 'exterior' AND c.altura_m IS NOT NULL)
+WITH c, en, dic,
+     NOT EXISTS { (c)-[:UTILIZA]->(:Material) } AND en.nivel_exposicion = 'alta' AS rq_material,
+     c.lleva_luz AND NOT EXISTS { (c)-[:UTILIZA]->(:ComponenteElectrico) } AND en.nivel_exposicion = 'alta' AS rq_componentes,
+     c.lleva_luz AND NOT EXISTS { (c)-[:UTILIZA]->(:ComponenteElectrico {tipo:'fuente'}) } AND c.altura_m IS NOT NULL AS ci_fuente
+WHERE rq_material OR rq_componentes OR ci_fuente
+FOREACH (_ IN CASE WHEN rq_material THEN [1] ELSE [] END |
+  MERGE (rq:RequisitoMaterial {id:'RQ-MAT-' + c.caso})
+  SET rq:Instancia:Inferido, rq.caso = c.caso, rq.frame = 'RequisitoMaterial', rq.aplica_a = 'cuerpo y frente',
+      rq.exigencia = 'Apto para exterior y radiación UV (el PLA no está indicado)', rq.exposicion_de_origen = en.nivel_exposicion,
+      rq.equivale_a = 'R-MI-04'
+  MERGE (dic)-[:ESTABLECE {regla:'R-MI-13'}]->(rq))
+FOREACH (_ IN CASE WHEN rq_componentes THEN [1] ELSE [] END |
+  MERGE (rq:RequisitoMaterial {id:'RQ-COMP-' + c.caso})
+  SET rq:Instancia:Inferido, rq.caso = c.caso, rq.frame = 'RequisitoMaterial', rq.aplica_a = 'componente',
+      rq.exigencia = 'Tiras, fuente y conexiones con protección contra agua [grado IP: a validar]', rq.exposicion_de_origen = en.nivel_exposicion,
+      rq.equivale_a = 'R-MI-03'
+  MERGE (dic)-[:ESTABLECE {regla:'R-MI-13'}]->(rq))
+FOREACH (_ IN CASE WHEN ci_fuente THEN [1] ELSE [] END |
+  MERGE (ci:CondicionInstalacion {id:'CI-FUENTE-' + c.caso})
+  SET ci:Instancia:Inferido, ci.caso = c.caso, ci.frame = 'CondicionInstalacion', ci.regla_origen = 'R-MI-13',
+      ci.descripcion = 'Fuente accesible sin desmontar las letras y protegida (el cartel va en altura)'
+  MERGE (dic)-[:IMPONE {regla:'R-MI-13'}]->(ci))
+WITH c
+MERGE (ev:Evaluacion {id:'EV-' + c.caso})
+WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'R-MI-13'})
+MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = c.id;
+// R-MI-14: soporte no verificado y capacidad desconocida (R-MI-05 no evaluable) → condición de relevamiento
+MATCH (c:Cartel {desde_ficha:true, datos_minimos_ok:true})-[:SE_FIJA_CON]->(:SistemaFijacion)-[:SE_ANCLA_EN]->(so:Soporte {estado:'no_verificado'}),
+      (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
+WHERE so.capacidad_relativa IS NULL
+MERGE (ci:CondicionInstalacion {id:'CI-SOPORTE-' + c.caso})
+SET ci:Instancia:Inferido, ci.caso = c.caso, ci.frame = 'CondicionInstalacion', ci.regla_origen = 'R-MI-14',
+    ci.descripcion = 'Relevar el soporte (' + so.tipo + ') y fijar a su estructura portante antes de instalar'
+MERGE (dic)-[:IMPONE {regla:'R-MI-14'}]->(ci)
+WITH c
+MERGE (ev:Evaluacion {id:'EV-' + c.caso})
+WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'R-MI-14'})
+MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = c.id;
+// R-MI-06: bandera, o exterior en altura con exposición alta (viento) → verificación estructural profesional
+MATCH (c:Cartel {desde_ficha:true, datos_minimos_ok:true})-[:SE_INSTALA_EN]->(en:Entorno), (dic:DictamenAdecuacion {id:'DIC-' + c.caso})
+WHERE c.montaje = 'bandera' OR (en.tipo = 'exterior' AND c.altura_m IS NOT NULL AND en.nivel_exposicion = 'alta')
 MERGE (vp:VerificacionProfesional {id:'VP-' + c.caso})
-SET vp:Instancia:Inferido, vp.caso = c.caso, vp.frame = 'VerificacionProfesional', vp.tipo = 'estructural', vp.estado = 'a_confirmar'
+SET vp:Instancia:Inferido, vp.caso = c.caso, vp.frame = 'VerificacionProfesional', vp.tipo = 'estructural',
+    vp.motivo = CASE WHEN c.montaje = 'bandera' THEN ['bandera sobre la vereda', 'viento'] ELSE ['altura (' + toString(c.altura_m) + ' m)', 'viento'] END,
+    vp.pendiente = '[PENDIENTE: umbral de gran porte, CIRSOC 102; se aplica el criterio conservador del PI2]'
 MERGE (dic)-[:SENALA {regla:'R-MI-06'}]->(vp)
-MERGE (av:Advertencia {id:'AV-RMI06-' + c.caso})
-SET av:Instancia:Inferido, av.caso = c.caso, av.frame = 'Advertencia', av.motivo = 'umbral_pendiente',
-    av.texto = 'R-MI-06: cartel exterior a ' + toString(c.altura_m) + ' m de altura; evaluar verificación estructural profesional [PENDIENTE: umbral de tamaño/altura/viento, CIRSOC 102]'
-MERGE (dic)-[:INCLUYE {regla:'R-MI-06'}]->(av)
 WITH c
 MERGE (ev:Evaluacion {id:'EV-' + c.caso})
 WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'R-MI-06'})
 MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = c.id;
-// R-MI-10 / R-MI-11: dictamen
+// Dictamen: R-MI-12 (no apto) > R-MI-11 (apto con condiciones) > R-MI-10 (apto)
 MATCH (c:Cartel {desde_ficha:true}), (dic:DictamenAdecuacion {id:'DIC-' + c.caso}), (smm:Submodulo {id:'SM-MAN'})
-OPTIONAL MATCH (dic)-[:REGISTRA]->(k:Conflicto)
-WITH c, dic, smm, collect(k) AS ks
-WITH c, dic, smm, ks,
+WITH c, dic, smm,
+     COUNT { (dic)-[:REUNE]->(:Conflicto {severidad:'excluyente'}) } AS excluyentes,
+     COUNT { (dic)-[:REUNE|IMPONE|ESTABLECE|SENALA]->() } AS salidas
+WITH c, dic, smm,
      CASE WHEN NOT c.datos_minimos_ok THEN ['no_evaluable', 'R-MI-01']
-          WHEN size(ks) = 0 THEN ['apto', 'R-MI-10']
-          WHEN all(k IN ks WHERE k.resoluble_con_condicion) THEN ['apto_con_condiciones', 'R-MI-11']
-          ELSE ['no_apto', 'R-MI-03'] END AS res
-SET dic.resultado = res[0], dic.regla = res[1], dic.condiciones = [k IN ks | k.condicion]
+          WHEN excluyentes > 0 THEN ['no_apto', 'R-MI-12']
+          WHEN salidas > 0 THEN ['apto_con_condiciones', 'R-MI-11']
+          ELSE ['apto', 'R-MI-10'] END AS res
+SET dic.resultado = res[0], dic.regla = res[1],
+    dic.reglas_aplicadas = [(ev:Evaluacion {id:'EV-' + c.caso})-[a:ACTIVO {paso:'MAT'}]->(r) | r.id] + [res[1]],
+    dic.destinatarios = ['manufacturabilidad', 'fabricante']
 MERGE (dic)-[:ALIMENTA]->(smm)
 WITH c, dic, res
 MERGE (ev:Evaluacion {id:'EV-' + c.caso})
 WITH c, dic, res, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:res[1]})
 MERGE (ev)-[a:ACTIVO {paso:'MAT'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAT', a.sobre = c.id
-RETURN c.caso AS caso, dic.resultado AS dictamen, dic.regla AS regla, dic.condiciones AS condiciones,
-       [(dic)-[:INCLUYE]->(av:Advertencia) | av.texto] AS advertencias
+RETURN c.caso AS caso, dic.resultado AS dictamen, dic.regla AS regla,
+       [(dic)-[:REUNE]->(k) | k.tipo + ' (' + k.severidad + ')'] AS restricciones,
+       [(dic)-[:ESTABLECE]->(x) | x.id] AS requisitos,
+       [(dic)-[:IMPONE]->(x) | x.id] AS condiciones,
+       [(dic)-[:SENALA]->(x) | x.id] AS verificaciones
 ORDER BY caso;
 // =====================================================================================
 // PARTE A — Manufacturabilidad y rediseño (Luciano)
@@ -404,9 +463,10 @@ ORDER BY caso;
 </details>
 
 ```text
-caso, dictamen, regla, condiciones, advertencias
-"CU1", "apto", "R-MI-10", [], ["EX-02: no se informó humedad alta ni sol directo; se aplica la regla general (interior = exposición baja)"]
-"CU2", "apto_con_condiciones", "R-MI-11", ["Material indicado para exterior y radiación UV (la ficha no define material)", "Componentes eléctricos con protección contra agua [PENDIENTE: grado IP exigido, IEC 60529]"], ["R-MI-06: cartel exterior a 4 m de altura; evaluar verificación estructural profesional [PENDIENTE: umbral de tamaño/altura/viento, CIRSOC 102]", "EX-01: no se informó alero ni nicho; se evalúa como exterior expuesto (R-MI-08 no aplica)"]
+caso, dictamen, regla, restricciones, requisitos, condiciones, verificaciones
+"CU1", "apto", "R-MI-10", [], [], [], []
+"CU2", "apto_con_condiciones", "R-MI-11", [], ["RQ-MAT-CU2", "RQ-COMP-CU2"], ["CI-SOPORTE-CU2", "CI-FUENTE-CU2"], ["VP-CU2"]
+"FR-07", "no_apto", "R-MI-12", ["Mantenimiento (corregible)", "Electrica (excluyente)"], [], ["CI-FUENTE-FR-07"], ["VP-FR-07"]
 ```
 
 ## Paso 09 — Detección: MAN-R7 (material), MAN-R3 (volumen), MAN-R2 (trazo), MAN-R4 (peso)
@@ -416,20 +476,28 @@ caso, dictamen, regla, condiciones, advertencias
 <details><summary>Consulta</summary>
 
 ```cypher
-// Esperado: CU2 → PETG (resuelve el conflicto MaterialEntorno de Lautaro). CU1 (1000 mm), CU2 (3000 mm) y L-C2 (500 mm)
+// Esperado: CU2 → PETG (cumple el requisito de material RQ-MAT-CU2 de Lautaro, INTEG-03). CU1 (1000 mm), CU2 (3000 mm) y L-C2 (500 mm)
 // → ExcedeCama. L-C1 → TrazoFino. L-C3 → RiesgoCaida.
-// MAN-R7: exterior → PETG, descartar PLA
+// MAN-R7: exterior → PETG, descartar PLA. Solo para carteles con cuerpo impreso (no los Neón LED sobre acrílico)
+// ni los que Materiales dictaminó «no apto» (su rediseño no está cubierto por las reglas de Luciano).
+// INTEG-03: si Materiales dejó un requisito de material para el cuerpo, el PETG lo cumple.
 MATCH (c:Cartel)-[:SE_INSTALA_EN]->(en:Entorno {tipo:'exterior'}), (petg:Material {id:'MAT-PETG'}), (pla:Material {id:'MAT-PLA'})
+WHERE coalesce(c.tipo_cartel, '') <> 'NeonLED'
+  AND NOT EXISTS { (:DictamenAdecuacion {resultado:'no_apto'})-[:EVALUA]->(c) }
 SET c.material = 'PETG'
 MERGE (c)-[:UTILIZA {regla:'MAN-R7'}]->(petg)
 MERGE (c)-[:DESCARTA {regla:'MAN-R7', motivo:'deformación térmica / UV en exterior'}]->(pla)
-WITH c
-OPTIONAL MATCH (:DictamenAdecuacion {id:'DIC-' + c.caso})-[:REGISTRA]->(k:Conflicto {tipo:'MaterialEntorno'})
-FOREACH (x IN CASE WHEN k IS NULL THEN [] ELSE [k] END | SET x.estado = 'Resuelto', x.resuelto_por = 'MAN-R7: PETG apto exterior')
-WITH DISTINCT c
+WITH c, petg
+OPTIONAL MATCH (:DictamenAdecuacion {id:'DIC-' + c.caso})-[:ESTABLECE]->(rq:RequisitoMaterial {aplica_a:'cuerpo y frente'})
+FOREACH (x IN CASE WHEN rq IS NULL THEN [] ELSE [rq] END |
+  MERGE (x)-[:SE_CUMPLE_CON {regla:'INTEG-03', alcance:'cuerpo (el frente queda a definir)'}]->(petg)
+  SET x.estado = 'cumplido para el cuerpo por MAN-R7 (PETG)')
+WITH DISTINCT c, rq IS NOT NULL AS cumple
 MERGE (ev:Evaluacion {id:'EV-' + c.caso}) ON CREATE SET ev:Instancia:Inferido, ev.caso = c.caso, ev.frame = 'Evaluacion'
-WITH c, ev WITH *, COUNT { (ev)-[:ACTIVO]->() } AS n_act MATCH (r:Regla {id:'MAN-R7'})
-MERGE (ev)-[a:ACTIVO {paso:'MAN'}]->(r) ON CREATE SET a.orden = n_act + 1, a.submodulo = 'MAN', a.sobre = c.id;
+WITH c, ev, ['MAN-R7'] + CASE WHEN cumple THEN ['INTEG-03'] ELSE [] END AS rids, COUNT { (ev)-[:ACTIVO]->() } AS n_act
+UNWIND range(0, size(rids) - 1) AS i
+MATCH (r:Regla {id: rids[i]})
+MERGE (ev)-[a:ACTIVO {paso:'MAN'}]->(r) ON CREATE SET a.orden = n_act + i + 1, a.submodulo = r.submodulo, a.sobre = c.id;
 // MAN-R3: dimensión máxima > volumen útil de la impresora
 MATCH (c:Cartel)-[:TIENE]->(g:Geometria), (h:Herramienta {id:'IMP3D'})-[:DEFINE]->(rc:RestriccionConstructiva {tipo:'Volumen'})
 WHERE g.dimension_maxima_mm > h.volumen_util_maximo
@@ -616,6 +684,7 @@ caso, conflicto, alternativa, viable, decision
 
 ```cypher
 // Esperado: una Recomendacion por caso con las alternativas viables, el material y las condiciones de Materiales.
+// FR-07 (no apto) no llega a recomendación: su rediseño (cambiar componentes, reubicar la fuente) no tiene regla de Luciano.
 MATCH (c:Cartel)
 MATCH (k:Conflicto {caso:c.caso, origen:'manufactura'})
 OPTIONAL MATCH (k)-[:EXIGE*1..2]->(alt:AlternativaRediseno {viable:true})
@@ -628,7 +697,9 @@ SET rec:Instancia:Inferido, rec.caso = c.caso, rec.frame = 'Recomendacion', rec.
     rec.alternativas = [a IN alts | a.nombre],
     rec.material = c.material,
     rec.dictamen_materiales = dic.resultado,
-    rec.condiciones_instalacion = coalesce([x IN dic.condiciones WHERE NOT x STARTS WITH 'Material'], []),
+    rec.condiciones_instalacion = [(dic)-[:IMPONE]->(x) | x.descripcion],
+    rec.requisitos = [(dic)-[:ESTABLECE]->(x) | x.exigencia + coalesce(' → ' + x.estado, '')],
+    rec.verificaciones = [(dic)-[:SENALA]->(x) | 'verificación ' + x.tipo],
     rec.advertencias = [a IN alts WHERE a.advertencia IS NOT NULL | a.advertencia],
     rec.tecnologia = coalesce(c.tecnologia_iluminacion, c.pendiente)
 FOREACH (a IN alts | MERGE (a)-[:CONFORMA {regla:'INTEG-02'}]->(rec))
@@ -653,7 +724,7 @@ MATCH (n:Instancia) WHERE NOT (n)-[:INSTANCIA_DE]->() MATCH (f:Frame {nombre:n.f
 ```text
 caso, tipo, alternativas, material, dictamen, condiciones
 "CU1", "rediseno", ["SegmentacionModular", "CambioFijacion_Refuerzo"], NULL, "apto", []
-"CU2", "rediseno", ["SegmentacionModular", "CambioFijacion_Refuerzo"], "PETG", "apto_con_condiciones", ["Componentes eléctricos con protección contra agua [PENDIENTE: grado IP exigido, IEC 60529]"]
+"CU2", "rediseno", ["SegmentacionModular", "CambioFijacion_Refuerzo"], "PETG", "apto_con_condiciones", ["Relevar el soporte (marquesina) y fijar a su estructura portante antes de instalar", "Fuente accesible sin desmontar las letras y protegida (el cartel va en altura)"]
 "L-C1", "rediseno", ["PasarRetroiluminado"], "PLA", NULL, []
 "L-C2", "rediseno", ["SegmentacionModular", "CambioFijacion_Refuerzo"], NULL, NULL, []
 "L-C3", "rediseno", ["ReducirInfill"], NULL, NULL, []
@@ -677,7 +748,7 @@ CALL {
          + reduce(s = '', n IN [(f)-[:INCLUYE]->(x:NecesidadFuncional) | x.id + ' cubre la tecnología'] | s + n) AS resultado
   UNION ALL
   MATCH (dic:DictamenAdecuacion {caso:'CU1'})-[:EVALUA]->(c)-[:SE_INSTALA_EN]->(en)
-  RETURN 3 AS n, 'Materiales (Lautaro)' AS submodulo, 'exposición ' + en.nivel_exposicion + ' → ' + dic.resultado + ' (' + dic.regla + ')' AS resultado
+  RETURN 3 AS n, 'Materiales (Lautaro)' AS submodulo, 'exposición ' + en.nivel_exposicion + ' (' + en.regla_exposicion + ') → ' + dic.resultado + ' (' + dic.regla + ')' AS resultado
   UNION ALL
   MATCH (k:Conflicto {caso:'CU1', origen:'manufactura'})
   RETURN 4 AS n, 'Manufacturabilidad (Luciano)' AS submodulo, k.tipo + ': ' + k.detalle AS resultado
@@ -693,8 +764,8 @@ RETURN n AS paso, submodulo, resultado ORDER BY paso;
 ```text
 paso, submodulo, resultado
 1, "Interpretación (Matías)", "P-01 listo_para_evaluacion, iteración 3"
-2, "Ficha", "FR-01: contenido_texto=Café Andino; entorno=interior; largo=≈ 1 m; soporte_y_montaje=pared de mampostería, adosado; NF1 cubre la tecnología"
-3, "Materiales (Lautaro)", "exposición baja → apto (R-MI-10)"
+2, "Ficha", "FR-01: soporte_y_montaje=pared de mampostería, adosado; contenido_texto=Café Andino; entorno=interior; largo=≈ 1 m; NF1 cubre la tecnología"
+3, "Materiales (Lautaro)", "exposición baja (R-MI-GEN) → apto (R-MI-10)"
 4, "Manufacturabilidad (Luciano)", "ExcedeCama: 1000 mm > 400 mm de cama"
 5, "Recomendación", "SegmentacionModular + CambioFijacion_Refuerzo + decide: fabricante"
 ```
@@ -706,8 +777,9 @@ paso, submodulo, resultado
 <details><summary>Consulta</summary>
 
 ```cypher
-// Esperado: FR-02 con RC1 (plazo, obligatoria) y AV2 → Materiales: exposición alta, apto con condiciones →
-// Manufacturabilidad: PETG (MAN-R7) + segmentación letra por letra + refuerzo; advertencias de plazo y de R-MI-06.
+// Esperado: FR-02 con RC1 (plazo, obligatoria) y AV2 → Materiales (PI2 Lautaro, caso 1): exposición alta, sin material
+// definido → requisitos (R-MI-13), condiciones (R-MI-13, R-MI-14) y verificación estructural (R-MI-06) → apto con condiciones
+// (R-MI-11) → Manufacturabilidad: PETG (MAN-R7) cumple el requisito de material + segmentación letra por letra + refuerzo.
 CALL {
   MATCH (f:FichaRequerimientos {id:'FR-02'})
   RETURN 1 AS n, 'Ficha (Matías)' AS submodulo,
@@ -717,21 +789,26 @@ CALL {
   MATCH (dic:DictamenAdecuacion {caso:'CU2'})-[:EVALUA]->(c)-[:SE_INSTALA_EN]->(en)
   RETURN 2 AS n, 'Materiales (Lautaro)' AS submodulo, 'exposición ' + en.nivel_exposicion + ' (' + en.regla_exposicion + ') → ' + dic.resultado + ' (' + dic.regla + ')' AS resultado
   UNION ALL
-  MATCH (dic:DictamenAdecuacion {caso:'CU2'})-[:REGISTRA]->(k:Conflicto)
-  RETURN 3 AS n, 'Materiales: condición' AS submodulo, k.condicion + ' [' + k.estado + coalesce(' por ' + k.resuelto_por, '') + ']' AS resultado
+  MATCH (:DictamenAdecuacion {caso:'CU2'})-[e:ESTABLECE]->(rq:RequisitoMaterial)
+  RETURN 3 AS n, 'Materiales: requisito' AS submodulo, rq.exigencia + ' [' + e.regla + ']' + coalesce(' → ' + rq.estado, '') AS resultado
+  UNION ALL
+  MATCH (:DictamenAdecuacion {caso:'CU2'})-[i:IMPONE]->(ci:CondicionInstalacion)
+  RETURN 4 AS n, 'Materiales: condición' AS submodulo, ci.descripcion + ' [' + i.regla + ']' AS resultado
+  UNION ALL
+  MATCH (:DictamenAdecuacion {caso:'CU2'})-[sx:SENALA]->(vp:VerificacionProfesional)
+  RETURN 5 AS n, 'Materiales: verificación' AS submodulo, vp.tipo + ' (' + reduce(s = '', m IN vp.motivo | s + m + ' ') + ') [' + sx.regla + ']' AS resultado
   UNION ALL
   MATCH (c:Cartel {caso:'CU2'})-[u:UTILIZA]->(m:Material)
-  RETURN 4 AS n, 'Manufacturabilidad (Luciano)' AS submodulo, 'material ' + m.nombre + ' (' + u.regla + ')' AS resultado
+  RETURN 6 AS n, 'Manufacturabilidad (Luciano)' AS submodulo, 'material ' + m.nombre + ' (' + u.regla + ')' AS resultado
   UNION ALL
   MATCH (k:Conflicto {caso:'CU2', origen:'manufactura'})
-  RETURN 5 AS n, 'Manufacturabilidad (Luciano)' AS submodulo, k.tipo + ': ' + k.detalle AS resultado
+  RETURN 7 AS n, 'Manufacturabilidad (Luciano)' AS submodulo, k.tipo + ': ' + k.detalle AS resultado
   UNION ALL
   MATCH (rec:Recomendacion {caso:'CU2'})
-  RETURN 6 AS n, 'Recomendación' AS submodulo, reduce(s = '', a IN rec.alternativas | s + a + ' + ') + 'PETG; decide: ' + rec.decide AS resultado
+  RETURN 8 AS n, 'Recomendación' AS submodulo, reduce(s = '', a IN rec.alternativas | s + a + ' + ') + 'PETG; decide: ' + rec.decide AS resultado
   UNION ALL
-  MATCH (rec:Recomendacion {caso:'CU2'}) UNWIND rec.advertencias + [(:DictamenAdecuacion {caso:'CU2'})-[:INCLUYE]->(av) | av.texto] AS adv
-  WITH DISTINCT adv
-  RETURN 7 AS n, 'Advertencia' AS submodulo, adv AS resultado
+  MATCH (rec:Recomendacion {caso:'CU2'}) UNWIND rec.advertencias AS adv
+  RETURN 9 AS n, 'Advertencia' AS submodulo, adv AS resultado
 }
 RETURN n AS paso, submodulo, resultado ORDER BY paso;
 ```
@@ -742,19 +819,64 @@ RETURN n AS paso, submodulo, resultado ORDER BY paso;
 paso, submodulo, resultado
 1, "Ficha (Matías)", "restricciones: RC1 plazo: antes de la inauguración | advertencias: AV2"
 2, "Materiales (Lautaro)", "exposición alta (R-MI-02) → apto_con_condiciones (R-MI-11)"
-3, "Materiales: condición", "Material indicado para exterior y radiación UV (la ficha no define material) [Resuelto por MAN-R7: PETG apto exterior]"
-3, "Materiales: condición", "Componentes eléctricos con protección contra agua [PENDIENTE: grado IP exigido, IEC 60529] [Abierto]"
-4, "Manufacturabilidad (Luciano)", "material PETG (MAN-R7)"
-5, "Manufacturabilidad (Luciano)", "ExcedeCama: 3000 mm > 400 mm de cama"
-6, "Recomendación", "SegmentacionModular + CambioFijacion_Refuerzo + PETG; decide: fabricante"
-7, "Advertencia", "Impacto sobre RC1 (plazo: antes de la inauguración, obligatoria) no evaluable [PENDIENTE: criterio del experto]"
-7, "Advertencia", "R-MI-06: cartel exterior a 4 m de altura; evaluar verificación estructural profesional [PENDIENTE: umbral de tamaño/altura/viento, CIRSOC 102]"
-7, "Advertencia", "EX-01: no se informó alero ni nicho; se evalúa como exterior expuesto (R-MI-08 no aplica)"
+3, "Materiales: requisito", "Apto para exterior y radiación UV (el PLA no está indicado) [R-MI-13] → cumplido para el cuerpo por MAN-R7 (PETG)"
+3, "Materiales: requisito", "Tiras, fuente y conexiones con protección contra agua [grado IP: a validar] [R-MI-13]"
+4, "Materiales: condición", "Relevar el soporte (marquesina) y fijar a su estructura portante antes de instalar [R-MI-14]"
+4, "Materiales: condición", "Fuente accesible sin desmontar las letras y protegida (el cartel va en altura) [R-MI-13]"
+5, "Materiales: verificación", "estructural (altura (4 m) viento ) [R-MI-06]"
+6, "Manufacturabilidad (Luciano)", "material PETG (MAN-R7)"
+7, "Manufacturabilidad (Luciano)", "ExcedeCama: 3000 mm > 400 mm de cama"
+8, "Recomendación", "SegmentacionModular + CambioFijacion_Refuerzo + PETG; decide: fabricante"
+9, "Advertencia", "Impacto sobre RC1 (plazo: antes de la inauguración, obligatoria) no evaluable [PENDIENTE: criterio del experto]"
+9, "Advertencia", "Impacto sobre RC1 (plazo: antes de la inauguración, obligatoria) no evaluable [PENDIENTE: criterio del experto]"
 ```
 
-## Paso 14 — Las restricciones del cliente filtran las alternativas (admite / rechaza)
+## Paso 14 — Caso 2 del PI2 de Lautaro: Neón LED en bandera → no apto, con cada restricción y su causa
 
-*Caso:* L-C1+L-C3 · *Modo en demo.sh:* `corta` · *Ejecución:* OK
+*Caso:* FR-07 · *Modo en demo.sh:* `corta` · *Ejecución:* OK
+
+<details><summary>Consulta</summary>
+
+```cypher
+// Esperado: el alero no cubre (R-MI-08 se evalúa y no aplica) → exposición alta (R-MI-02); Neón LED y fuente de interior
+// → restricción eléctrica EXCLUYENTE (R-MI-03); fuente cerrada → mantenimiento corregible (R-MI-07); bandera →
+// verificación estructural (R-MI-06). R-MI-12 tiene prioridad sobre R-MI-11 → NO APTO.
+CALL {
+  MATCH (ex:Excepcion {caso:'FR-07'})-[a:AJUSTA]->(en:Entorno)
+  RETURN 1 AS n, 'Excepción (' + a.regla + ')' AS paso_materiales, ex.tipo + ': ' + ex.condicion + ' → aplica = ' + toString(ex.aplica) AS resultado
+  UNION ALL
+  MATCH (en:Entorno {caso:'FR-07'})
+  RETURN 2 AS n, 'Exposición (' + en.regla_exposicion + ')' AS paso_materiales, en.nivel_exposicion AS resultado
+  UNION ALL
+  MATCH (:DictamenAdecuacion {caso:'FR-07'})-[r:REUNE]->(k:Conflicto)
+  RETURN 3 AS n, 'Restricción (' + r.regla + ')' AS paso_materiales,
+         k.tipo + ', ' + k.severidad + ' — causada por: ' + reduce(s = '', x IN [(k)-[:CAUSADO_POR]->(c) | c.id] | s + x + ' ') +
+         coalesce('→ se resuelve con: ' + head([(k)-[:SE_RESUELVE_CON]->(ci) | ci.descripcion]), '') AS resultado
+  UNION ALL
+  MATCH (:DictamenAdecuacion {caso:'FR-07'})-[sx:SENALA]->(vp:VerificacionProfesional)
+  RETURN 4 AS n, 'Verificación (' + sx.regla + ')' AS paso_materiales, vp.tipo + ': ' + reduce(s = '', m IN vp.motivo | s + m + ' ') AS resultado
+  UNION ALL
+  MATCH (dic:DictamenAdecuacion {caso:'FR-07'})
+  RETURN 5 AS n, 'Dictamen (' + dic.regla + ')' AS paso_materiales, toUpper(dic.resultado) + ' → pasa a Manufacturabilidad con las causas' AS resultado
+}
+RETURN n AS paso, paso_materiales, resultado ORDER BY paso;
+```
+
+</details>
+
+```text
+paso, paso_materiales, resultado
+1, "Excepción (R-MI-08)", "alero: alero de 0,4 m; el cartel sobresale 1,0 m sobre la vereda → aplica = false"
+2, "Exposición (R-MI-02)", "alta"
+3, "Restricción (R-MI-07)", "Mantenimiento, corregible — causada por: CE-FR-07-FUENTE → se resuelve con: Fuente accesible sin desmontar el cartel y protegida"
+3, "Restricción (R-MI-03)", "Electrica, excluyente — causada por: ENT-FR-07 CE-FR-07-NEON CE-FR-07-FUENTE "
+4, "Verificación (R-MI-06)", "estructural: bandera sobre la vereda viento "
+5, "Dictamen (R-MI-12)", "NO_APTO → pasa a Manufacturabilidad con las causas"
+```
+
+## Paso 15 — Las restricciones del cliente filtran las alternativas (admite / rechaza)
+
+*Caso:* L-C1+L-C3 · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 
 <details><summary>Consulta</summary>
 
@@ -778,7 +900,7 @@ caso, restriccion_del_cliente, decision, alternativa, regla
 "L-C3", "instalación no invasiva (sin perforar)", "ADMITE", "ReducirInfill", "MAN-R9"
 ```
 
-## Paso 15 — Trazabilidad: qué reglas se activaron, en qué orden y de dónde sale cada una
+## Paso 16 — Trazabilidad: qué reglas se activaron, en qué orden y de dónde sale cada una
 
 *Caso:* CU2 · *Modo en demo.sh:* `corta` · *Ejecución:* OK
 
@@ -805,19 +927,20 @@ orden, submodulo, regla, nombre, origen
 8, "INT", "INT-R11", "Suficiencia del pedido", "propuesta"
 9, "INT", "INT-R12", "Herencia de incertidumbre", "propuesta"
 10, "COM", "INTEG-01", "Ficha → Cartel", "propuesta"
-11, "MAT", "R-MI-01", "Datos mínimos", "experto"
+11, "MAT", "R-MI-01", "Datos mínimos incompletos", "experto"
 12, "MAT", "R-MI-02", "Exposición alta", "experto"
-13, "MAT", "R-MI-03", "Componente eléctrico vs entorno", "documental+experto"
-14, "MAT", "R-MI-04", "Material vs entorno", "documental+experto"
-15, "MAT", "R-MI-06", "Verificación estructural", "experto+documental"
+13, "MAT", "R-MI-13", "Material o componente no definido", "propuesta"
+14, "MAT", "R-MI-14", "Soporte no verificado", "propuesta"
+15, "MAT", "R-MI-06", "Derivación a verificación profesional", "experto+documental"
 16, "MAT", "R-MI-11", "Dictamen apto con condiciones", "experto"
 17, "MAN", "MAN-R7", "Material apto exterior", "documental"
-18, "MAN", "MAN-R3", "Conflicto de volumen", "documental"
-19, "MAN", "MAN-FILTRO", "Filtro por restricciones innegociables", "experto"
-20, "COM", "INTEG-02", "Recomendación y traza", "propuesta"
+18, "COM", "INTEG-03", "Requisito de Materiales → material de Manufacturabilidad", "propuesta"
+19, "MAN", "MAN-R3", "Conflicto de volumen", "documental"
+20, "MAN", "MAN-FILTRO", "Filtro por restricciones innegociables", "experto"
+21, "COM", "INTEG-02", "Recomendación y traza", "propuesta"
 ```
 
-## Paso 16 — Insumo para el LLM explicador: recomendación + reglas + slots + fuentes (el LLM no decide)
+## Paso 17 — Insumo para el LLM explicador: recomendación + reglas + slots + fuentes (el LLM no decide)
 
 *Caso:* CU2 · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 
@@ -839,18 +962,19 @@ ORDER BY regla;
 recomendacion, regla, conclusion, fuente, slots_evaluados
 "REC-CU2", "INTEG-01", "instanciar Cartel/Entorno con los DatosConfirmados de la ficha (sin completar huecos)", "Interacción PI1 (los tres) + RL12 Luciano", ["Cartel.dimension_maxima_mm", "FichaRequerimientos.id"]
 "REC-CU2", "INTEG-02", "Recomendación que CONFORMAN las alternativas + registrar Evaluacion (reglas activadas)", "PI1 Luciano etapa 6 + pregunta integrador «Trazabilidad»", ["Recomendacion.tipo"]
+"REC-CU2", "INTEG-03", "RequisitoMaterial SE_CUMPLE_CON Material", "PI2 Lautaro (DI-01 → R7 de Luciano) + PI2 Luciano R7", ["Material.apto_exterior", "RequisitoMaterial.aplica_a"]
 "REC-CU2", "MAN-FILTRO", "alternativa viable (ADMITE si la restricción la respeta explícitamente)", "PI1 Luciano etapa 5 / PI2 RL8", ["AlternativaRediseno.viable", "RestriccionCliente.rigidez"]
 "REC-CU2", "MAN-R3", "Conflicto ExcedeCama + SegmentaciónModular que EXIGE CambioFijación (refuerzo)", "PI2 Luciano R3 (ficha impresora)", ["Herramienta.volumen_util_maximo", "Geometria.dimension_maxima_mm"]
 "REC-CU2", "MAN-R7", "descartar PLA, seleccionar PETG", "PI2 Luciano R7 (propiedades térmicas FDM)", ["Entorno.tipo", "Cartel.material"]
-"REC-CU2", "R-MI-01", "no evaluar; solicitar el dato a Interpretación (⇒ el faltante es bloqueante)", "PI1 Lautaro §7", ["ConsultaSubmodulo.respuesta", "Cartel.dimension_maxima_mm", "Soporte.tipo", "Entorno.tipo"]
-"REC-CU2", "R-MI-02", "nivel_exposicion = alta", "PI1 Lautaro §7", ["Entorno.nivel_exposicion", "Entorno.proteccion", "Entorno.tipo"]
-"REC-CU2", "R-MI-03", "registrar conflicto componente–entorno (condición: protección IP [PENDIENTE: grado])", "PI1 Lautaro §7 (IEC 60529)", ["ComponenteElectrico.grado_ip", "Entorno.nivel_exposicion"]
-"REC-CU2", "R-MI-04", "registrar conflicto material–entorno (condición: material apto exterior)", "PI1 Lautaro §7", ["Material.apto_exterior", "Entorno.nivel_exposicion"]
-"REC-CU2", "R-MI-06", "marcar verificación estructural profesional", "PI1 Lautaro §7 (CIRSOC 102)", ["Cartel.altura_m", "Cartel.montaje"]
-"REC-CU2", "R-MI-11", "dictamen apto con condiciones, listando cada condición", "PI1 Lautaro §7", ["DictamenAdecuacion.condiciones", "DictamenAdecuacion.resultado"]
+"REC-CU2", "R-MI-01", "no evaluar (pendiente_de_datos); solicitar el dato a Interpretación (⇒ el faltante es bloqueante)", "PI2 Lautaro R-MI-01 (M8)", ["ConsultaSubmodulo.respuesta", "Cartel.dimension_maxima_mm", "Cartel.montaje", "Soporte.tipo", "Entorno.tipo"]
+"REC-CU2", "R-MI-02", "nivel_exposicion = alta", "PI2 Lautaro R-MI-02", ["Entorno.nivel_exposicion", "Entorno.alcance_proteccion", "Entorno.proteccion_superior", "Entorno.tipo"]
+"REC-CU2", "R-MI-06", "VerificacionProfesional estructural; el dictamen no puede ser apto", "PI2 Lautaro R-MI-06 (CIRSOC 102)", ["Entorno.nivel_exposicion", "Cartel.altura_m", "Cartel.montaje"]
+"REC-CU2", "R-MI-11", "dictamen apto con condiciones, listando cada una", "PI2 Lautaro R-MI-11", ["Conflicto.severidad", "DictamenAdecuacion.resultado"]
+"REC-CU2", "R-MI-13", "no bloquear; RequisitoMaterial equivalente a R-MI-03/04 según la exposición; en altura, condición «fuente accesible»", "PI2 Lautaro R-MI-13 (nueva, M3)", ["RequisitoMaterial.exigencia", "Cartel.altura_m", "Entorno.nivel_exposicion", "Cartel.material"]
+"REC-CU2", "R-MI-14", "condición: relevar el soporte y fijar a su estructura portante antes de instalar", "PI2 Lautaro R-MI-14 (nueva, M7)", ["Soporte.capacidad_relativa", "Soporte.estado"]
 ```
 
-## Paso 17 — Frame de ejemplo con slots y facetas: DatoFaltante hereda de Dato (ES_UN)
+## Paso 18 — Frame de ejemplo con slots y facetas: DatoFaltante hereda de Dato (ES_UN)
 
 *Caso:* Modelo · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 
@@ -878,7 +1002,7 @@ definido_en, slot, tipo, valores, defecto, card, demonio
 "Dato", "valor_normalizado", "Número", "", "", "0..1", "—"
 ```
 
-## Paso 18 — Origen del conocimiento: reglas por submódulo y origen (experto / propuesta / documental)
+## Paso 19 — Origen del conocimiento: reglas por submódulo y origen (experto / propuesta / documental)
 
 *Caso:* Modelo · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 
@@ -894,7 +1018,7 @@ ORDER BY submodulo, origen;
 
 ```text
 submodulo, origen, reglas, ids
-"COM", "propuesta", 2, ["INTEG-01", "INTEG-02"]
+"COM", "propuesta", 3, ["INTEG-01", "INTEG-03", "INTEG-02"]
 "INT", "propuesta", 13, ["INT-R01", "INT-R02", "INT-R03", "INT-R04", "INT-R05", "INT-R06", "INT-R07", "INT-R08", "INT-R09", "INT-R10", "INT-R11", "INT-R12", "INT-R13"]
 "MAN", "documental", 4, ["MAN-R1", "MAN-R2", "MAN-R3", "MAN-R7"]
 "MAN", "experto", 6, ["MAN-R4", "MAN-R5", "MAN-R6", "MAN-R9", "MAN-FILTRO", "MAN-G1"]
@@ -902,9 +1026,10 @@ submodulo, origen, reglas, ids
 "MAT", "documental+experto", 2, ["R-MI-03", "R-MI-04"]
 "MAT", "experto", 9, ["R-MI-01", "R-MI-02", "R-MI-GEN", "R-MI-05", "R-MI-07", "R-MI-08", "R-MI-09", "R-MI-10", "R-MI-11"]
 "MAT", "experto+documental", 1, ["R-MI-06"]
+"MAT", "propuesta", 3, ["R-MI-12", "R-MI-13", "R-MI-14"]
 ```
 
-## Paso 19 — Qué queda [PENDIENTE] en el modelo (para validar con el experto)
+## Paso 20 — Qué queda [PENDIENTE] en el modelo (para validar con el experto)
 
 *Caso:* Modelo · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 
@@ -925,32 +1050,34 @@ RETURN tipo, elemento, detalle ORDER BY tipo, elemento;
 
 ```text
 tipo, elemento, detalle
-"Frame", "AgenteAmbiental", "[PENDIENTE: PI2 Lautaro]"
-"Frame", "ComponenteElectrico", "[PENDIENTE: PI2 Lautaro]"
-"Frame", "DictamenAdecuacion", "[PENDIENTE: PI2 Lautaro]"
-"Frame", "Entorno", "[PENDIENTE: PI2 Lautaro]"
-"Frame", "Soporte", "[PENDIENTE: PI2 Lautaro]"
-"Frame", "VerificacionProfesional", "[PENDIENTE: PI2 Lautaro]"
 "Instancia", "CAR-P-01", "[PENDIENTE: criterio del experto para proponer la tecnología de iluminación]"
 "Instancia", "CAR-P-02", "[PENDIENTE: criterio del experto para proponer la tecnología de iluminación]"
 "Instancia", "FIJ-CINTA", "[PENDIENTE: carga admisible de la cinta bifaz]"
+"Instancia", "FIJ-FR-07", "[PENDIENTE: sistema de fijación a definir (lo deriva R-MI-06)]"
 "Instancia", "FIJ-P-01", "[PENDIENTE: sistema de fijación a definir]"
 "Instancia", "FIJ-P-02", "[PENDIENTE: sistema de fijación a definir]"
 "Instancia", "GEO-P-01", "[PENDIENTE: ancho de canal y peso requieren el vector del diseño]"
 "Instancia", "GEO-P-02", "[PENDIENTE: ancho de canal y peso requieren el vector del diseño]"
+"Instancia", "MAT-ACR", "[PENDIENTE: resistencia UV y térmica según fichas técnicas]"
 "Instancia", "RC-PESO", "[PENDIENTE: carga admisible]"
 "Instancia", "RC-TEMP", "[PENDIENTE: temperatura de deformación]"
-"Slot", "ComponenteElectrico.grado_ip", "IEC 60529 [PENDIENTE: grado exigido según exposición]"
-"Slot", "Entorno.nivel_exposicion", "Variable difusa candidata [PENDIENTE: funciones de pertenencia]"
-"Slot", "Material.resistencia_uv", "[PENDIENTE: fichas técnicas] para acrílico, PVC, ACM, chapa, silicona"
+"Instancia", "VP-CU2", "[PENDIENTE: umbral de gran porte, CIRSOC 102; se aplica el criterio conservador del PI2]"
+"Instancia", "VP-FR-07", "[PENDIENTE: umbral de gran porte, CIRSOC 102; se aplica el criterio conservador del PI2]"
+"Slot", "Cartel.peso_estimado", "Estimación del experto [PENDIENTE: criterio, PI2 Lautaro «a validar»]"
+"Slot", "ComponenteElectrico.grado_ip", "IEC 60529 [PENDIENTE: grado exigido según exposición, a validar]"
+"Slot", "Entorno.alcance_proteccion", "Solo si hay protección; qué es un alero «efectivo» [PENDIENTE: criterio a validar]"
+"Slot", "Entorno.nivel_exposicion", "Exposición ambiental (PI2 Lautaro C8). Variable difusa candidata [PENDIENTE: funciones de pertenencia]"
+"Slot", "Excepcion.efecto", "Magnitud del efecto [PENDIENTE: a validar]"
+"Slot", "Material.resistencia_termica", "[PENDIENTE: fichas técnicas]"
+"Slot", "Material.resistencia_uv", "[PENDIENTE: fichas técnicas]"
 "Slot", "NecesidadFuncional.tecnologia_asociada", "Interpretación no puede asignarla; la propone Manufacturabilidad [PENDIENTE: criterio]"
 "Slot", "Pedido.datos_requeridos", "Valor provisional de PG0/PI1 [PENDIENTE: conjunto por tipo de cartel]"
 "Slot", "RestriccionConstructiva.valor_limite", "Trazo 6 mm, Volumen 400 mm (documental); Peso [PENDIENTE]"
 "Slot", "SistemaFijacion.carga_admisible", "[PENDIENTE: valor] (RestriccionPeso)"
-"Slot", "Soporte.capacidad", "[PENDIENTE: peso seguro por soporte]"
+"Slot", "Soporte.capacidad_relativa", "Placa de yeso = baja (§6); mampostería = no_baja («en principio buen soporte»). Niveles finos [PENDIENTE: a validar]"
 ```
 
-## Paso 20 — INT-R09 como restricción de integridad: ningún dato con valor «supuesto»
+## Paso 21 — INT-R09 como restricción de integridad: ningún dato con valor «supuesto»
 
 *Caso:* Control · *Modo en demo.sh:* `extra` · *Ejecución:* OK
 

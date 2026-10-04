@@ -2,25 +2,26 @@
 
 Un solo modelo para los tres submódulos. Todo lo de este documento está cargado en Neo4j
 (`neo4j/02_modelo.cypher` se genera desde la misma especificación: `salida/build/modelo_spec.py`).
-El submódulo de Lautaro no tiene PI2: sus frames se derivan de su PI1 y se marcan **[PENDIENTE: PI2 Lautaro]**.
+Los tres submódulos están modelados desde su PI2 (el de Lautaro se incorporó el 04/10/2026: `pi2/Quiros_Lautaro_PI2_U1.md`).
 
 ## 1. Nombres unificados
 
-| Concepto unificado | Matías (PI2) | Lautaro (PI1) | Luciano (PI2) | Por qué |
+| Concepto unificado | Matías (PI2) | Lautaro (PI2) | Luciano (PI2) | Por qué |
 |---|---|---|---|---|
-| **Cartel** | — (trabaja con Pedido/Dato) | Cartel, Configuración propuesta | Diseño | Es el objeto que se evalúa y rediseña; «Diseño» queda como sinónimo |
+| **Cartel** | — (trabaja con Pedido/Dato) | Configuración del cartel (C1) + Cartel (C2) | Diseño | Es el objeto que se evalúa y rediseña. La Configuración de Lautaro es el Cartel con sus relaciones; su `estado` vive en `DictamenAdecuacion.resultado` (no_evaluable = pendiente_de_datos) |
 | **FichaRequerimientos** | Ficha de requerimientos interpretados | ficha de requerimientos | FichaRequerimientos | Ya estaba alineado: es la interfaz entre submódulos |
 | **Requerimiento → RestriccionCliente / Preferencia / NecesidadFuncional** | ídem, con `rigidez` | «restricciones del cliente» | RestricciónCliente (rigidez + fidelidad_logo, tamaño_final_fijo, no_invasiva) | Los slots booleanos de Luciano pasan a `criterio` + `nivel`; la rigidez es la de Matías |
-| **Entorno** | Dato `entorno` | Entorno → Exposición ambiental | slot `Diseño.entorno` | Nodo propio: tiene tipo, protección y nivel de exposición (variable difusa candidata) |
-| **Conflicto** | — | «restricción detectada con su causa» | Conflicto | Mismo concepto: hallazgo que viola un límite. `origen` = instalación o manufactura |
+| **Entorno** | Dato `entorno` | Entorno (C6) → Exposición ambiental (C8) | slot `Diseño.entorno` | Nodo propio con los slots del frame ENTORNO de Lautaro; la exposición (un estado) pasa a slot `nivel_exposicion` (variable difusa candidata) |
+| **Conflicto** | — | Restricción (C15) con severidad excluyente / corregible | Conflicto | Mismo concepto: hallazgo que viola un límite o criterio. `origen` = instalación o manufactura; `severidad` decide el dictamen |
 | **RestriccionConstructiva** | — | — | RestricciónConstructiva | Límite físico (6 mm, 400 mm). Se separa del hallazgo (Conflicto) |
-| **DictamenAdecuacion** | — | Dictamen de adecuación | EvaluaciónMateriales | Salida de Lautaro y entrada de Luciano |
-| **SistemaFijacion** / **Soporte** | — | Sistema de fijación / Soporte | SistemaFijación (sin. «Soporte») | Se elimina el sinónimo ambiguo: Soporte = superficie; SistemaFijacion = elementos de unión |
-| **Material** | — | acrílico, PVC, ACM, chapa, silicona | PLA, PETG | Un frame; solo PLA/PETG tienen propiedades documentadas |
+| **DictamenAdecuacion** | — | Dictamen de adecuación (C19), que reúne restricciones, impone condiciones, establece requisitos y señala verificaciones | EvaluaciónMateriales | Salida de Lautaro y entrada de Luciano |
+| **SistemaFijacion** / **Soporte** | — | Sistema de fijación (C11) se_ancla_en Soporte (C9) | SistemaFijación (sin. «Soporte») | Se elimina el sinónimo ambiguo: Soporte = superficie; SistemaFijacion = elementos de unión |
+| **Material** | — | PLA, PETG, acrílico (alcance acotado al taller, M2) | PLA, PETG | Un frame con especializaciones PLA, PETG y Acrilico |
 | **TecnologiaIluminacion** vs `tipo_cartel` | Dato tecnología (corpóreo) + iluminación | tiene_tecnología (Neón LED / Corpóreo / Retroiluminado) | NeónFrontal / Retroiluminado | El tipo de cartel (PG0) y la tecnología de iluminación son ejes distintos |
 | **Recomendacion** | — | — | Recomendación (sin. «Dictamen») | «Dictamen» queda para Lautaro |
-| **Aclaracion** | Aclaración / Consulta a submódulo | «solicitud de datos faltantes» | «devolver al submódulo de interpretación» (R8) | Todo pedido al cliente pasa por Interpretación |
-| **UTILIZA / SE_FIJA_CON** | — | usa / se_fija_con | utiliza | Un verbo por relación |
+| **Aclaracion** | Aclaración / Consulta a submódulo | Solicitud de datos faltantes (C13) | «devolver al submódulo de interpretación» (R8) | Todo pedido al cliente pasa por Interpretación |
+| **RequisitoMaterial / CondicionInstalacion** | — | Requisito de material (C17) / Condición de instalación (C16) | — (el requisito llega con el dictamen) | Frames nuevos del PI2 de Lautaro: lo que el material todavía no elegido debe cumplir y lo que hay que hacer para resolver una restricción corregible |
+| **UTILIZA / SE_FIJA_CON** | — | usa, incorpora / se_fija_con | utiliza | Un verbo por relación |
 
 ## 2. Red semántica integrada
 
@@ -91,12 +92,15 @@ flowchart LR
   Cartel -->|UTILIZA| Material
   Cartel -->|UTILIZA| ComponenteElectrico
   Cartel -->|SE_FIJA_CON| SistemaFijacion
-  SistemaFijacion -->|SOBRE| Soporte
+  SistemaFijacion -->|SE_ANCLA_EN| Soporte
   DictamenAdecuacion -->|EVALUA| Cartel
-  DictamenAdecuacion -->|REGISTRA| Conflicto
+  DictamenAdecuacion -->|REUNE| Conflicto
   DictamenAdecuacion -->|SENALA| VerificacionProfesional
-  DictamenAdecuacion -->|INCLUYE| Advertencia
   Conflicto -->|CAUSADO_POR| Entorno
+  Conflicto -->|CAUSADO_POR| Material
+  Conflicto -->|CAUSADO_POR| ComponenteElectrico
+  Conflicto -->|CAUSADO_POR| Soporte
+  Excepcion -->|AJUSTA| Entorno
   Excepcion -->|MODIFICA| Regla
   Cartel -->|TIENE| Geometria
   Cartel -->|REQUIERE| TecnologiaIluminacion
@@ -143,8 +147,8 @@ flowchart LR
 6. Las relaciones generadas por reglas llevan la propiedad `regla` → trazabilidad.
 7. Lo que no está relevado no se inventa: queda como slot vacío con nota `[PENDIENTE: …]`.
 
-Totales en Neo4j: 55 frames, 105 slots, 66 relaciones de esquema,
-38 reglas, 6 excepciones.
+Totales en Neo4j: 58 frames, 123 slots, 73 relaciones de esquema,
+42 reglas, 7 excepciones.
 
 ## 3. Jerarquía de frames (slots, facetas y demonios)
 
@@ -396,71 +400,81 @@ Agente experto del sistema.
 
 Configuración propuesta que se evalúa y, si hace falta, se rediseña.
 
-*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PG0 (Cartel) = PI1 Lautaro (Cartel/Configuración) = PI2 Luciano C1 (Diseño)
+*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PG0 (Cartel) = PI2 Lautaro C1/C2 (Configuración del cartel + Cartel) = PI2 Luciano C1 (Diseño)
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
-| tipo_cartel | Enum | NeonLED \| Corporeo \| Retroiluminado | — | 0..1 | — | PG0 |
+| tipo_cartel | Enum | NeonLED \| Corporeo \| Retroiluminado | — | 0..1 | — | PG0; especializaciones del frame CARTEL de Lautaro |
 | lleva_luz | Booleano | — | — | 0..1 | — | — |
 | tecnologia_iluminacion | Enum | NeonFrontal \| Retroiluminado | — | 0..1 | si_necesario: si vacío y lleva_luz → la propone Manufacturabilidad [PENDIENTE: criterio]; si no consta si lleva luz → devolver a Interpretación | — |
-| material | Enum | PLA \| PETG | — | 0..1 | si_necesario: entorno Exterior → MAN-R7 | — |
-| dimension_maxima_mm | Número | > 0 | — | 0..1 | — | mm (se completa desde la ficha) |
-| montaje | Enum | adosado \| bandera \| colgado \| sobre_estructura \| sobre_marquesina | — | 0..1 | — | PI1 Lautaro |
-| altura_m | Número | > 0 | — | 0..1 | — | — |
+| material | Enum | PLA \| PETG \| Acrilico | — | 0..1 | si_necesario: vacío → Materiales deja un RequisitoMaterial (R-MI-13); entorno exterior → MAN-R7 | — |
+| dimension_maxima_mm | Número | > 0 | — | 0..1 | — | mm (se completa desde la ficha); bloqueante (R-MI-01) |
+| doble_faz | Booleano | — | false | 0..1 | — | PI2 Lautaro (CARTEL.doble_faz) |
+| peso_estimado | Número | kg | — | 0..1 | si_necesario: estimar a partir de dimensiones y materiales | Estimación del experto [PENDIENTE: criterio, PI2 Lautaro «a validar»] |
+| montaje | Enum | adosado \| bandera \| colgado \| sobre_estructura | — | 0..1 | — | Método de instalación (PI2 Lautaro C10, modelado como slot); bloqueante (R-MI-01) |
+| altura_m | Número | > 0 | — | 0..1 | — | Postergable (PI2 Lautaro M8) |
 
 ### Entorno
 
-Lugar donde queda el cartel y su exposición.
+Lugar donde queda el cartel y condiciones a las que lo somete.
 
-*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro §2/§10 + PI2 Luciano (slot entorno) + PI2 Matías (Dato entorno) · **[PENDIENTE: PI2 Lautaro]**
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C6/C8 (frame ENTORNO) + PI2 Luciano (slot entorno) + PI2 Matías (Dato entorno)
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
-| tipo | Enum | interior \| exterior | — | 1 | — | — |
-| proteccion | Enum | ninguna \| alero \| nicho \| no_informada | no_informada | 1 | — | — |
-| condicion_especial | Enum | humedad_alta \| sol_directo \| ninguna \| no_informada | no_informada | 1 | — | — |
-| nivel_exposicion | Enum | baja \| media \| alta | — | 0..1 | si_necesario: interpretar con R-MI-02 / R-MI-08 / R-MI-09 / R-MI-GEN | Variable difusa candidata [PENDIENTE: funciones de pertenencia] |
+| tipo | Enum | interior \| exterior | — | 1 | — | Ubicación; bloqueante (R-MI-01) |
+| proteccion_superior | Enum | ninguna \| alero \| nicho \| marquesina | ninguna | 1 | si_agregado: ≠ ninguna → evaluar la excepción R-MI-08 | — |
+| alcance_proteccion | Enum | cubre \| no_cubre | — | 0..1 | — | Solo si hay protección; qué es un alero «efectivo» [PENDIENTE: criterio a validar] |
+| humedad | Enum | normal \| alta | normal | 1 | si_agregado: alta e interior → R-MI-09 | — |
+| sol_directo | Booleano | — | false | 1 | si_agregado: true e interior → R-MI-09 | — |
+| nivel_exposicion | Enum | baja \| media \| alta | — | 0..1 | si_necesario: calcular con R-MI-02 / R-MI-08 / R-MI-09 / R-MI-GEN | Exposición ambiental (PI2 Lautaro C8). Variable difusa candidata [PENDIENTE: funciones de pertenencia] |
 
 ### Material
 
-Insumo base del cartel.
+Material del cuerpo, frente, difusor o placa base.
 
-*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro + PI2 Luciano C6 · *Especializaciones:* PLA, PETG
+*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C3 (alcance M2: PLA, PETG, acrílico) + PI2 Luciano C6 · *Especializaciones:* PLA, PETG, Acrilico
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
 | nombre | Texto | — | — | 1 | — | — |
-| apto_exterior | Booleano | — | — | 0..1 | — | Documentado solo para PLA/PETG (propiedades térmicas FDM) |
-| resistencia_uv | Texto | — | — | 0..1 | — | [PENDIENTE: fichas técnicas] para acrílico, PVC, ACM, chapa, silicona |
+| funcion | Enum | cuerpo \| frente \| difusor \| placa_base | — | 1..n | — | — |
+| apto_exterior | Enum | si \| no \| a_validar | — | 1 | — | Fichas técnicas + experto; PLA = no (coincide con MAN-R7) |
+| resistencia_uv | Enum | baja \| media \| alta | — | 0..1 | — | [PENDIENTE: fichas técnicas] |
+| resistencia_termica | Enum | baja \| media \| alta | — | 0..1 | — | [PENDIENTE: fichas técnicas] |
 
 ### ComponenteElectrico
 
-Tiras LED, Neón LED, fuente, cableado.
+Tira de Neón LED, tira LED, fuente y conexiones.
 
-*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Es parte de:* Cartel · *Origen:* PI1 Lautaro §2 · **[PENDIENTE: PI2 Lautaro]**
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Es parte de:* Cartel · *Origen:* PI2 Lautaro C4/C5 (frame COMPONENTE_ELÉCTRICO)
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
-| tipo | Enum | tira_LED \| neon_LED \| fuente \| cableado | — | 1 | — | — |
-| grado_ip | Texto | — | — | 0..1 | — | IEC 60529 [PENDIENTE: grado exigido según exposición] |
-| accesible | Booleano | — | — | 0..1 | — | R-MI-07 |
+| tipo | Enum | tira_neon_led \| tira_led \| fuente \| conexion | — | 1 | — | — |
+| uso_declarado | Enum | interior \| exterior | — | 1 | — | — |
+| grado_ip | Texto | — | — | 0..1 | si_necesario: si falta y la exposición es alta → tratar como sin protección | IEC 60529 [PENDIENTE: grado exigido según exposición, a validar] |
+| ubicacion | Enum | interna_cerrada \| interna_accesible \| externa | — | 0..1 | si_agregado: interna_cerrada → evaluar R-MI-07 | Solo fuente |
+| accesible | Booleano | — | — | 0..1 | — | Solo fuente (R-MI-07) |
 
 ### Soporte
 
 Superficie o estructura donde se fija el cartel.
 
-*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro §2 · **[PENDIENTE: PI2 Lautaro]**
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C9 (frame SOPORTE)
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
-| tipo | Enum | mamposteria \| placa_de_yeso \| vidrio \| estructura_metalica \| marquesina | — | 1 | — | — |
-| capacidad | Enum | baja \| normal | — | 0..1 | — | [PENDIENTE: peso seguro por soporte] |
+| tipo | Enum | mamposteria \| placa_de_yeso \| vidrio \| estructura_metalica \| marquesina | — | 1 | — | Bloqueante (R-MI-01) |
+| capacidad_relativa | Enum | baja \| no_baja | — | 0..1 | — | Placa de yeso = baja (§6); mampostería = no_baja («en principio buen soporte»). Niveles finos [PENDIENTE: a validar] |
+| estado | Enum | verificado \| no_verificado \| deficiente | no_verificado | 1 | si_agregado: no_verificado y capacidad desconocida → R-MI-14 | — |
+| estructura_portante | Enum | si \| no \| desconocido | desconocido | 1 | si_agregado: si → habilita la excepción de R-MI-05 (EX-03) | — |
 
 ### SistemaFijacion
 
 Elementos que unen el cartel al soporte.
 
-*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro §2 + PI2 Luciano C8
+*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C11 + PI2 Luciano C8
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
@@ -472,7 +486,7 @@ Elementos que unen el cartel al soporte.
 
 UV, agua, temperatura, viento.
 
-*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro §10 · **[PENDIENTE: PI2 Lautaro]**
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C7
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
@@ -482,34 +496,59 @@ UV, agua, temperatura, viento.
 
 Salida de Materiales: apto / apto con condiciones / no apto.
 
-*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro §2 = PI2 Luciano C4 (EvaluaciónMateriales) · **[PENDIENTE: PI2 Lautaro]**
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C19 (frame DICTAMEN_ADECUACIÓN) = PI2 Luciano C4 (EvaluaciónMateriales)
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
-| resultado | Enum | apto \| apto_con_condiciones \| no_apto \| no_evaluable | — | 1 | — | — |
-| condiciones | Lista(Texto) | — | — | 0..n | — | — |
+| resultado | Enum | apto \| apto_con_condiciones \| no_apto \| no_evaluable | — | 1 | si_necesario: aplicar R-MI-12, luego R-MI-11, luego R-MI-10 | no_evaluable = Configuración pendiente_de_datos (R-MI-01) |
 | reglas_aplicadas | Lista(Regla) | — | — | 1..n | — | — |
+| destinatarios | Lista | manufacturabilidad, fabricante | — | 2 | si_agregado: enviar al submódulo de Manufacturabilidad (L. Marquesini) | — |
+
+### CondicionInstalacion
+
+Lo que debe cumplirse para resolver una restricción corregible.
+
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C16 (M4)
+
+| Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
+|---|---|---|---|---|---|---|
+| descripcion | Texto | — | — | 1 | — | — |
+| regla_origen | Texto | — | — | 1 | — | R-MI-05 / 07 / 13 / 14 |
+
+### RequisitoMaterial
+
+Exigencia para un material o componente todavía no definido.
+
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C17 (M3)
+
+| Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
+|---|---|---|---|---|---|---|
+| aplica_a | Enum | cuerpo \| frente \| componente | — | 1 | — | — |
+| exigencia | Texto | — | — | 1 | — | — |
+| exposicion_de_origen | Enum | baja \| media \| alta | — | 1 | si_agregado: se envía al submódulo de rediseño junto con el dictamen | — |
 
 ### VerificacionProfesional
 
 Revisión estructural/eléctrica que el sistema señala y no resuelve.
 
-*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI1 Lautaro §2 · **[PENDIENTE: PI2 Lautaro]**
+*Submódulo:* Materiales (Lautaro) · *Hereda de:* — (raíz) · *Origen:* PI2 Lautaro C18
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
 | tipo | Enum | estructural \| electrica | — | 1 | — | — |
+| motivo | Lista(Texto) | — | — | 1..n | — | — |
 
 ### Excepcion
 
-Condición particular que relaja o endurece una regla general.
+Situación particular que ajusta una regla general.
 
-*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PG0 + PI1 Lautaro §6 + PI1 Luciano §6
+*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PG0 + PI2 Lautaro C14 + PI1 Luciano §6
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
 | condicion | Texto | — | — | 1 | — | — |
-| efecto | Texto | — | — | 1 | — | — |
+| efecto | Texto | — | — | 1 | — | Magnitud del efecto [PENDIENTE: a validar] |
+| aplica | Booleano | — | — | 0..1 | — | Se conserva aunque no aplique, para dejar registro (PI2 Lautaro) |
 
 ### Regla
 
@@ -573,12 +612,13 @@ Límite físico innegociable de la manufactura.
 
 Hallazgo: una característica viola un límite o criterio.
 
-*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PI2 Luciano C11 = PI1 Lautaro «restricción detectada»
+*Submódulo:* Compartido · *Hereda de:* — (raíz) · *Origen:* PI2 Luciano C11 = PI2 Lautaro C15 (Restricción)
 
 | Slot | Tipo | Valores / rango | Defecto | Card. | Demonio | Nota |
 |---|---|---|---|---|---|---|
-| tipo | Enum | TrazoFino \| ExcedeCama \| RiesgoCaida \| MaterialEntorno \| ComponenteEntorno \| Instalacion \| Mantenimiento | — | 1 | — | — |
+| tipo | Enum | TrazoFino \| ExcedeCama \| RiesgoCaida \| MaterialEntorno \| Electrica \| Instalacion \| Mantenimiento | — | 1 | — | — |
 | origen | Enum | manufactura \| instalacion | — | 1 | — | — |
+| severidad | Enum | excluyente \| corregible | — | 0..1 | si_agregado: corregible → crear la CondicionInstalacion asociada | Solo origen instalación (PI2 Lautaro M5): decide el tipo de dictamen |
 | estado | Enum | Abierto \| Resuelto \| Inviable | Abierto | 1 | si_agregado: generar alternativas (MAN-R2/R3/R4); si_modificado: todas no viables → Inviable (MAN-R8) | — |
 
 ### AlternativaRediseno
@@ -620,8 +660,9 @@ Rastro de decisión de un caso: reglas activadas en orden.
 
 ## 4. Reglas trazables
 
-Origen: **experto** = conocimiento relevado de Luciano (en Lautaro, declarado «experto» en su PI1 pero todavía
-candidato); **propuesta** = regla formulada por nosotros (Matías o integración) pendiente de validar con el experto;
+Origen: **experto** = conocimiento relevado de Luciano (en Lautaro, R-MI-01 a R-MI-11: criterios del experto
+formalizados en su PI2, con los umbrales como parámetros «a validar»); **propuesta** = regla formulada por nosotros
+(Matías, integración, y R-MI-12/13/14, que Lautaro agregó al modelar) pendiente de validar con el experto;
 **documental** = sale de una ficha técnica o norma. En Neo4j cada regla es un nodo `:Regla` con `[:USA]->(:Slot)`.
 
 | ID | Submódulo | SI (condición) | ENTONCES (conclusión) | Origen | Tipo | Fuente | Estado | Implementada |
@@ -639,18 +680,21 @@ candidato); **propuesta** = regla formulada por nosotros (Matías o integración
 | **INT-R11** | INT | todo dato requerido confirmado, cubierto por NF o faltante postergable; sin ambiguos; sin contradicciones abiertas | Pedido.estado = listo_para_evaluacion + crear FichaRequerimientos | **propuesta** | Determinística / inferencial | PI1 Matías regla 8 | Candidata (pendiente de validación con el experto) | 04 |
 | **INT-R12** | INT | al crear la ficha hay faltantes postergables, rigidez a_confirmar o referencias restringidas | crear una Advertencia por cada uno | **propuesta** | Inferencial | PI1 Matías pregunta experta 8 | Candidata (pendiente de validación con el experto) | 04 |
 | **INT-R13** | INT | una Aclaración pasa a respondida | nueva Expresión (respuesta_a_aclaracion), reevaluar R01–R03/R07, iteración + 1 | **propuesta** | Determinística | PI1 Matías flecha «Nueva info» | Candidata (pendiente de validación con el experto) | 04 |
-| **R-MI-01** | MAT | falta entorno, tipo de soporte o dimensiones | no evaluar; solicitar el dato a Interpretación (⇒ el faltante es bloqueante) | **experto** | Determinística | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
-| **R-MI-02** | MAT | exterior, sin alero ni nicho, expuesto a sol y lluvia | nivel_exposicion = alta | **experto** | Difusa (hoy crisp) | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
-| **R-MI-GEN** | MAT | entorno interior sin humedad alta ni sol directo | nivel_exposicion = baja | **experto** | Contextual | PI1 Lautaro §6 (regla general) | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
-| **R-MI-03** | MAT | exposición alta y componente eléctrico sin protección adecuada contra agua | registrar conflicto componente–entorno (condición: protección IP [PENDIENTE: grado]) | **documental+experto** | Determinística | PI1 Lautaro §7 (IEC 60529) | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
-| **R-MI-04** | MAT | exposición alta y material no indicado para exterior/UV | registrar conflicto material–entorno (condición: material apto exterior) | **documental+experto** | Heurística | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
-| **R-MI-05** | MAT | soporte de baja capacidad y peso mayor al seguro | conflicto de instalación; revisar fijación a estructura | **experto** | Heurística | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | no (sin caso; umbral [PENDIENTE]) |
-| **R-MI-06** | MAT | gran porte, bandera o en altura con exposición al viento | marcar verificación estructural profesional | **experto+documental** | Contextual | PI1 Lautaro §7 (CIRSOC 102) | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 (como advertencia: umbral [PENDIENTE]) |
-| **R-MI-07** | MAT | fuente de alimentación sin acceso | conflicto de mantenimiento | **experto** | Heurística | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | no (dato no relevado en los casos) |
-| **R-MI-08** | MAT | exterior dentro de nicho o bajo alero efectivo | reducir nivel de exposición (magnitud a validar) | **experto** | Contextual | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | no (sin caso) |
-| **R-MI-09** | MAT | interior con humedad alta o sol directo | evaluar con exposición media o alta | **experto** | Contextual | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | no (sin caso) |
-| **R-MI-10** | MAT | sin conflictos y datos completos | dictamen apto; derivar a Manufacturabilidad | **experto** | Determinística | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
-| **R-MI-11** | MAT | conflictos resolubles con condiciones (fijación, protección, acceso) | dictamen apto con condiciones, listando cada condición | **experto** | Heurística | PI1 Lautaro §7 | Candidata PI1, sin valores numéricos [PENDIENTE: PI2 Lautaro] | 04 |
+| **R-MI-01** | MAT | falta entorno, soporte / método de instalación o dimensiones | no evaluar (pendiente_de_datos); solicitar el dato a Interpretación (⇒ el faltante es bloqueante) | **experto** | Determinística | PI2 Lautaro R-MI-01 (M8) | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-02** | MAT | exterior y (sin protección superior o la protección no cubre) | nivel_exposicion = alta | **experto** | Determinística (candidata a difusa) | PI2 Lautaro R-MI-02 | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-GEN** | MAT | interior con humedad normal y sin sol directo | nivel_exposicion = baja | **experto** | Contextual | PI1 Lautaro §6 (regla general; valores por defecto del frame ENTORNO) | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-03** | MAT | exposición alta y un componente sin la protección contra agua exigida (grado IP: a validar) | restricción eléctrica, severidad excluyente, causada por el componente y la exposición | **documental+experto** | Determinística | PI2 Lautaro R-MI-03 (IEC 60529) | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-04** | MAT | exposición alta y Material.apto_exterior = no | restricción material–entorno, severidad excluyente, causada por el material | **documental+experto** | Heurística | PI2 Lautaro R-MI-04 (fichas técnicas; = MAN-R7) | Formalizada PI2; umbrales «a validar» con el experto | 04 (sin caso que la dispare) |
+| **R-MI-05** | MAT | capacidad_relativa = baja y peso estimado mayor al seguro (umbral: a validar) | restricción de instalación excluyente, SALVO estructura portante (EX-03): corregible + condición «fijar a la estructura» | **experto** | Heurística | PI2 Lautaro R-MI-05 (§6) | Formalizada PI2; umbrales «a validar» con el experto | no (sin caso; umbral [PENDIENTE]) |
+| **R-MI-06** | MAT | gran porte (umbral: a validar), montaje en bandera, o en altura con exposición al viento | VerificacionProfesional estructural; el dictamen no puede ser apto | **experto+documental** | Contextual | PI2 Lautaro R-MI-06 (CIRSOC 102) | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-07** | MAT | fuente interna_cerrada y no accesible | restricción de mantenimiento corregible + condición «fuente accesible y protegida» | **experto** | Heurística | PI2 Lautaro R-MI-07 | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-08** | MAT | exterior con alero o nicho que cubre al cartel | nivel_exposicion = media en lugar de alta (magnitud a validar) | **experto** | Contextual | PI2 Lautaro R-MI-08 (§6) | Formalizada PI2; umbrales «a validar» con el experto | 04 (FR-07: se evalúa y no aplica) |
+| **R-MI-09** | MAT | interior con humedad alta o sol directo | nivel_exposicion = media (alta si se dan las dos) | **experto** | Contextual | PI2 Lautaro R-MI-09 (§5–§6) | Formalizada PI2; umbrales «a validar» con el experto | 04 (sin caso que la dispare) |
+| **R-MI-10** | MAT | evaluable y sin restricciones, condiciones, requisitos ni verificaciones | dictamen apto; derivar a Manufacturabilidad | **experto** | Determinística | PI2 Lautaro R-MI-10 | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-11** | MAT | sin restricciones excluyentes y con al menos una corregible, condición, requisito o verificación | dictamen apto con condiciones, listando cada una | **experto** | Determinística | PI2 Lautaro R-MI-11 | Formalizada PI2; umbrales «a validar» con el experto | 04 |
+| **R-MI-12** | MAT | existe al menos una restricción excluyente | dictamen no apto, con todas las restricciones y sus causas; derivar a Manufacturabilidad (prioridad sobre R-MI-11) | **propuesta** | Determinística | PI2 Lautaro R-MI-12 (nueva, M6) | Nueva en PI2 (surge del modelado); validar con el experto | 04 |
+| **R-MI-13** | MAT | la ficha no define material, componentes o ubicación de la fuente | no bloquear; RequisitoMaterial equivalente a R-MI-03/04 según la exposición; en altura, condición «fuente accesible» | **propuesta** | Inferencial | PI2 Lautaro R-MI-13 (nueva, M3) | Nueva en PI2 (surge del modelado); validar con el experto | 04 |
+| **R-MI-14** | MAT | soporte no_verificado y R-MI-05 no evaluable por falta de datos | condición: relevar el soporte y fijar a su estructura portante antes de instalar | **propuesta** | Heurística | PI2 Lautaro R-MI-14 (nueva, M7) | Nueva en PI2 (surge del modelado); validar con el experto | 04 |
 | **MAN-R1** | MAN | canal ≥ 6 mm, dimensión ≤ 400 mm, peso ≤ límite y sin advertencias | confirmar manufacturabilidad (listo para laminar) | **documental** | Determinística | PI2 Luciano R1 | Formalizada PI2 | 04 |
 | **MAN-R2** | MAN | ancho_canal_mm < 6 y tecnología NeónFrontal | Conflicto TrazoFino + alternativas CambioGeometría y CambioTecnología | **documental** | Determinística | PI2 Luciano R2 (ficha técnica neón) | Formalizada PI2 | 04 |
 | **MAN-R3** | MAN | dimension_maxima_mm > volumen_util_maximo (400) | Conflicto ExcedeCama + SegmentaciónModular que EXIGE CambioFijación (refuerzo) | **documental** | Determinística | PI2 Luciano R3 (ficha impresora) | Formalizada PI2 | 04 |
@@ -663,23 +707,26 @@ candidato); **propuesta** = regla formulada por nosotros (Matías o integración
 | **MAN-FILTRO** | MAN | ninguna RestriccionCliente obligatoria rechaza la alternativa | alternativa viable (ADMITE si la restricción la respeta explícitamente) | **experto** | Determinística | PI1 Luciano etapa 5 / PI2 RL8 | Formalizada PI2 | 04 |
 | **MAN-G1** | MAN | cartel exterior | usar placa base de mayor grosor [PENDIENTE: espesor] | **experto** | Contextual | PI1 Luciano §6 (regla general) | Relevada en PI1; sin valor | no (sin espesor relevado) |
 | **INTEG-01** | COM | existe FichaRequerimientos sin Cartel asociado | instanciar Cartel/Entorno con los DatosConfirmados de la ficha (sin completar huecos) | **propuesta** | Determinística | Interacción PI1 (los tres) + RL12 Luciano | Propuesta de integración | 04 |
+| **INTEG-03** | COM | hay un RequisitoMaterial del cuerpo y MAN-R7 elige un material apto exterior | RequisitoMaterial SE_CUMPLE_CON Material | **propuesta** | Determinística | PI2 Lautaro (DI-01 → R7 de Luciano) + PI2 Luciano R7 | Propuesta de integración | 04 |
 | **INTEG-02** | COM | Conflictos de manufactura resueltos con alternativas viables | Recomendación que CONFORMAN las alternativas + registrar Evaluacion (reglas activadas) | **propuesta** | Inferencial | PI1 Luciano etapa 6 + pregunta integrador «Trazabilidad» | Propuesta de integración | 04 |
 
 **Estrategia de resolución de conflictos.** Se conserva la de Matías (INT-R09 → INT-R13 → detección → clasificación →
 aclaraciones → INT-R11 → INT-R12) y se extiende al flujo integrado: Interpretación → INTEG-01 → Materiales
-(R-MI-01 → exposición → R-MI-03/04/06 → dictamen) → Manufacturabilidad (MAN-R7 → detección R2/R3/R4 → filtros
+(orden de disparo del PI2 de Lautaro: R-MI-01 → exposición R-MI-08/02/09 → detección R-MI-03…07, 13, 14, que se
+acumulan → dictamen R-MI-12 > R-MI-11 > R-MI-10) → Manufacturabilidad (MAN-R7 → detección R2/R3/R4 → filtros
 R6/R5/R9/FILTRO → R8) → INTEG-02. Es el orden de los bloques de `neo4j/04_consultas.cypher`.
 
 ### Excepciones
 
 | ID | Condición | Efecto | Modifica | Fuente |
 |---|---|---|---|---|
-| EX-01 | Cartel exterior dentro de un nicho o bajo un alero efectivo | Se reduce la exposición / el grado IP exigido (magnitud a validar) | R-MI-02 | PI1 Lautaro §6 |
-| EX-02 | Interior húmedo (cocina, natatorio, junto al mar) o con sol directo | Se evalúa con criterios de exterior | R-MI-GEN | PI1 Lautaro §6 |
-| EX-03 | Existe estructura portante accesible detrás del revestimiento | Pasa de no apto a apto con condiciones | R-MI-05 | PI1 Lautaro §6 |
-| EX-04 | Gran porte, bandera o altura con viento | El sistema no resuelve la fijación: deriva a un profesional | R-MI-06 | PI1 Lautaro §6 |
+| EX-01 | Cartel exterior bajo un alero o en un nicho que efectivamente lo cubre | La exposición baja de alta a media (magnitud a validar) | R-MI-02 | PI2 Lautaro R-MI-08 / §6 |
+| EX-02 | Interior húmedo (cocina, natatorio) o con sol directo | Se evalúa con exposición media o alta | R-MI-GEN | PI2 Lautaro R-MI-09 / §6 |
+| EX-03 | Existe estructura portante accesible detrás del revestimiento | La restricción de soporte pasa de excluyente a corregible | R-MI-05 | PI2 Lautaro R-MI-05 / §6 |
+| EX-04 | Gran porte, bandera o altura con viento | El sistema no resuelve la fijación: deriva a un profesional | R-MI-06 | PI2 Lautaro R-MI-06 |
 | EX-05 | Cartel exterior dentro de un nicho | Se puede relajar el grosor de la placa base | MAN-G1 | PI1 Luciano §6 |
 | EX-06 | Información ausente que puede completarse más adelante | El faltante es postergable y no bloquea (viaja como advertencia) | INT-R11 | PI1 Matías §6 |
+| EX-07 | Falta material, componente o ubicación de la fuente (lo elige el rediseño) | No bloquea: pasa como requisito (R-MI-13) | R-MI-01 | PI2 Lautaro M3 / M8 |
 
 ## 5. Incertidumbre → candidatos a variables difusas
 
@@ -688,10 +735,12 @@ marcadores crisp.
 
 | Variable lingüística | Términos tentativos | Dónde vive en el modelo | Fuente |
 |---|---|---|---|
-| Exposición ambiental | baja / media / alta | `Entorno.nivel_exposicion` (R-MI-02, R-MI-GEN) | PI1 Lautaro §8 |
-| Dificultad de instalación | — | altura, acceso, soporte, tamaño | PI1 Lautaro §8 |
-| Confiabilidad del soporte | — | `Soporte.capacidad` | PI1 Lautaro §8 |
-| Límite «mediano / gran porte» | — | R-MI-06 (hoy: advertencia) | PI1 Lautaro §8 |
+| Exposición ambiental | baja / media / alta | `Entorno.nivel_exposicion` (R-MI-02, R-MI-08, R-MI-09) | PI2 Lautaro §i (principal candidata) |
+| Porte del cartel y carga de viento | chico / intermedio / grande | R-MI-06 (FR-02 quedó en la frontera) | PI2 Lautaro §i |
+| Confiabilidad del soporte | poco confiable / aceptable / confiable | `Soporte.capacidad_relativa`, `Soporte.estado` | PI2 Lautaro §i |
+| Efectividad de la protección | nula / parcial / efectiva | `Entorno.alcance_proteccion` (R-MI-08) | PI2 Lautaro §i |
+| Peso respecto del soporte | holgado / en el límite / excedido | R-MI-05 (umbral a validar) | PI2 Lautaro §i |
+| Dificultad de instalación | baja / media / alta | (no modelada como slot) | PI2 Lautaro §i |
 | Flexibilidad estética del cliente | Baja / Media / Alta | `RestriccionCliente.nivel` (MAN-R5) | PI2 Luciano §i |
 | Complejidad de fabricación | Rutinaria / Moderada / Crítica | (no modelada aún) | PI2 Luciano §i |
 | Fidelidad al logo / impacto estético | Imperceptible / Aceptable / Deformativo | `AlternativaRediseno.impacto_estetico` (MAN-R6) | PI2 Luciano §i |
@@ -717,25 +766,44 @@ Base: P-01 del PI2 de Matías (iteraciones 1 y 2, tal cual) + regla R-MI-01 de L
 | 5 | Interpretación | respuesta a A4 **[dato de prueba simulado]**: «pared de ladrillo revocado… pegado a la pared» | INT-R13, INT-R09 | D4 confirmado (mampostería, adosado), iteración 3 |
 | 6 | Interpretación | — | INT-R11 | listo → **FR-01** |
 | 7 | Integración | FR-01 | INTEG-01 | Cartel 1000 mm, interior, mampostería; tecnología `[PENDIENTE]` |
-| 8 | **Materiales** | Cartel + Entorno | R-MI-01, R-MI-GEN, R-MI-10 | exposición baja → **apto** (advertencia EX-02 no verificable) |
+| 8 | **Materiales** | Cartel + Entorno + Soporte | R-MI-01, R-MI-GEN, R-MI-10 | exposición baja (humedad normal y sin sol directo: valores por defecto del frame); mampostería = buen soporte → **apto** |
 | 9 | **Manufacturabilidad** | Geometría 1000 mm vs impresora 400 mm | MAN-R3, MAN-FILTRO | ExcedeCama → **Segmentación modular + refuerzo**, viables |
 | 10 | Integración | — | INTEG-02 | Recomendación; **decide el fabricante** |
 
 ### CU2 — «Letras corpóreas exterior»: FR-02 cruza los tres submódulos
 
-Base: P-02 / FR-02 del PI2 de Matías + casos típicos de Lautaro («corpóreo exterior en fachada → apto con
-condiciones») + «Continuidad» del PI2 de Luciano (R3 y R7 sobre FR-02).
+Base: P-02 / FR-02 del PI2 de Matías + **caso 1 del PI2 de Lautaro** (FR-02, apto con condiciones) + «Continuidad»
+del PI2 de Luciano (R3 y R7 sobre FR-02). Los tres PI2 usan el mismo caso: la integración no es inventada.
 
 | Paso | Submódulo | Entrada | Regla | Salida |
 |---|---|---|---|---|
 | 1 | Interpretación | «letras corpóreas con luz… da a la calle… 3 m… sí o sí antes de la inauguración… si se puede colores del logo» + foto sin luz | INT-R03, R04, R05, R02, R10 | K1 contradicción, RC1 obligatoria, PR1 preferencia, D11 faltante |
 | 2 | Interpretación | «llevan luz; la foto era por la tipografía; sobre la marquesina a 4 m» | INT-R13, R11, R12 | **FR-02** + AV2 (la referencia solo vale para tipografía) |
-| 3 | Integración | FR-02 | INTEG-01 | Cartel corpóreo, con luz, 3000 mm, exterior, marquesina, 4 m |
-| 4 | **Materiales** | Cartel + Entorno | R-MI-02 | exposición **alta** (advertencia EX-01: alero/nicho no informado) |
-| 5 | **Materiales** | componentes / material / altura | R-MI-03, R-MI-04, R-MI-06, R-MI-11 | **apto con condiciones**: IP de lo eléctrico `[PENDIENTE grado]`, material apto exterior; verificación estructural a confirmar `[PENDIENTE umbral]` |
-| 6 | **Manufacturabilidad** | entorno exterior | MAN-R7 | **PETG** (descarta PLA) → resuelve la condición de material de Lautaro |
+| 3 | Integración | FR-02 | INTEG-01 | Cartel corpóreo, con luz, 3000 mm, exterior, sobre estructura (marquesina), 4 m; sin material ni componentes |
+| 4 | **Materiales** | Cartel + Entorno | R-MI-01, R-MI-02 | datos mínimos OK (falta material: no bloquea); exposición **alta** (sin protección superior) |
+| 5 | **Materiales** | material / componentes / soporte / altura | R-MI-13, R-MI-14, R-MI-06 | requisitos RQ-MAT (cuerpo y frente aptos exterior/UV) y RQ-COMP (protección contra agua, IP a validar); condiciones «relevar la marquesina» y «fuente accesible»; verificación estructural (altura y viento) |
+| 6 | **Materiales** | — | R-MI-11 | sin restricciones excluyentes → **apto con condiciones** |
+| 6b | **Manufacturabilidad** | entorno exterior + RQ-MAT | MAN-R7, INTEG-03 | **PETG** (descarta PLA) → cumple el requisito de material de Lautaro para el cuerpo |
 | 7 | **Manufacturabilidad** | 3000 mm vs 400 mm | MAN-R3, MAN-FILTRO | Segmentación (= letra por letra) + refuerzo; advertencia: impacto en RC1 (plazo) `[PENDIENTE]` |
 | 8 | Integración | — | INTEG-02 | Recomendación con material, alternativas y condiciones de instalación; decide el fabricante |
+
+### Caso de prueba complementario de Materiales: FR-07 (caso 2 del PI2 de Lautaro)
+
+Neón LED doble faz en bandera sobre la vereda, 3 m de altura, fachada de mampostería con alero de 0,4 m (el cartel
+sobresale 1,0 m). El cliente quiere reutilizar el Neón LED y la fuente de interior; la fuente iría cerrada en la caja.
+
+| Paso | Regla | Salida |
+|---|---|---|
+| 1 | R-MI-01 | datos mínimos completos |
+| 2 | R-MI-08 → R-MI-02 | la excepción del alero **se evalúa y no aplica** (no cubre) → exposición alta; queda registrada (EXC-FR-07) |
+| 3 | R-MI-03 | restricción **eléctrica excluyente**, causada por el Neón LED, la fuente y la exposición |
+| 4 | R-MI-07 | restricción de mantenimiento **corregible** → condición «fuente accesible y protegida» |
+| 5 | R-MI-06 | verificación estructural (bandera sobre la vereda + viento) |
+| 6 | R-MI-12 | **no apto** (prioridad sobre R-MI-11); pasa a Manufacturabilidad con todas las causas |
+
+Manufacturabilidad no genera recomendación: cambiar componentes o reubicar la fuente es rediseño, y el PI2 de
+Luciano no tiene regla para eso `[PENDIENTE: regla de rediseño para restricciones eléctricas y de mantenimiento]`.
+Imagen: `salida/img/fr07_instanciado.png`.
 
 ### Casos de prueba complementarios (submódulo de Luciano)
 
@@ -747,8 +815,11 @@ infill). Se usan para mostrar el **filtro por restricciones del cliente** (`sali
 
 - La integración resolvió un hueco real: la criticidad «bloqueante/postergable» que Matías no podía decidir la
   responde la regla R-MI-01 de Lautaro (consulta Q1). Es el tipo de dependencia que el modelo separado no mostraba.
-- La condición de material de Lautaro (R-MI-04) la resuelve una regla documental de Luciano (MAN-R7): dos submódulos,
-  un mismo nodo `Conflicto`.
+- El requisito de material que deja Lautaro cuando la ficha no trae material (R-MI-13) lo cumple una regla documental
+  de Luciano (MAN-R7 → PETG): `RequisitoMaterial -[:SE_CUMPLE_CON]-> Material`. Lautaro no elige el material, pero deja
+  la evidencia que la regla de Luciano necesita (así lo dice su PI2).
+- Con el PI2 de Lautaro el dictamen cubre los tres resultados: apto (CU1), apto con condiciones (CU2) y no apto (FR-07).
+- R-MI-12/13/14 son reglas nuevas que surgieron al modelar (no del relevamiento): se marcan como **propuesta**.
 - Inconsistencia detectada en el material: el conjunto provisional `datos_requeridos` incluye «apariencia», pero
   FR-02 no registra ningún dato de apariencia y aun así el PI2 de Matías lo da por suficiente. Se mantiene el
   resultado documentado (P-02 listo) y se marca para revisar `[PENDIENTE]`.

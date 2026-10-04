@@ -81,6 +81,16 @@ RETURN k.detalle AS conflicto, alt.nombre AS alternativa,
        alt.viable AS viable, alt.regla_viabilidad AS regla,
        COUNT { (:RestriccionCliente {caso:'CU1'}) } AS restricciones_del_cliente`;
 
+const Q_CU2 = `MATCH (dic:DictamenAdecuacion {caso:'CU2'})-[r:ESTABLECE|IMPONE|SENALA]->(x)
+RETURN type(r) AS relacion, r.regla AS regla,
+       CASE WHEN x.estado IS NULL THEN '' ELSE 'sí: PETG' END AS cumplido,
+       coalesce(x.exigencia, x.descripcion, 'verificación ' + x.tipo) AS detalle
+ORDER BY relacion, regla`;
+
+const Q_FR07 = `MATCH (dic:DictamenAdecuacion {caso:'FR-07'})-[:REUNE]->(k:Conflicto)-[:CAUSADO_POR]->(c)
+RETURN dic.resultado AS dictamen, dic.regla AS por, k.tipo AS restriccion,
+       k.severidad AS severidad, collect(c.id) AS causada_por`;
+
 const Q_TRAZA = `MATCH (ev:Evaluacion {caso:'CU1'})-[a:ACTIVO]->(r:Regla)
 RETURN a.orden AS orden, r.submodulo AS submodulo, r.id AS regla,
        r.nombre AS nombre, r.origen AS origen
@@ -227,7 +237,21 @@ aplicarPasos(9, 10, 11);
   await resultadoTabla(paso, 210);
 }
 
-// 5. Trazabilidad: tabla en pantalla completa y desplazamiento real hasta la última regla
+// 5. Materiales en CU2 (PI2 Lautaro, caso 1): apto con condiciones; el requisito de material lo cumple MAN-R7
+{
+  const paso = nuevoPaso('cu2', 'MAT', 'CU2: apto con condiciones; el requisito de material lo cumple el PETG');
+  await tipearYEjecutar(paso, Q_CU2, 4);
+  await resultadoTabla(paso, 210);
+}
+
+// 6. FR-07 (PI2 Lautaro, caso 2): no apto, cada restricción con su causa
+{
+  const paso = nuevoPaso('fr07', 'MAT', 'FR-07: Neón en bandera → no apto, con cada restricción y su causa');
+  await tipearYEjecutar(paso, Q_FR07, 3.5);
+  await resultadoTabla(paso, 210);
+}
+
+// 7. Trazabilidad: tabla en pantalla completa y desplazamiento real hasta la última regla
 {
   const paso = nuevoPaso('traza', 'COM', 'Trazabilidad: las 17 reglas que se activaron, en orden y con su origen');
   await tipearYEjecutar(paso, Q_TRAZA, 3);
@@ -248,7 +272,7 @@ aplicarPasos(9, 10, 11);
   await captura(paso, 75);
 }
 
-// 6. El mismo grafo después de aplicar las reglas de los tres submódulos
+// 8. El mismo grafo después de aplicar las reglas de los tres submódulos
 {
   const paso = nuevoPaso('grafo_final', 'COM', 'El mismo caso después de las reglas: Interpretación, Materiales y Manufacturabilidad');
   await tipearYEjecutar(paso, Q_GRAFO, 2);

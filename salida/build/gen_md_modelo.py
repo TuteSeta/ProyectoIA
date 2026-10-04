@@ -94,25 +94,26 @@ DOC = f"""# 02 — Modelo integrado (Grupo 11)
 
 Un solo modelo para los tres submódulos. Todo lo de este documento está cargado en Neo4j
 (`neo4j/02_modelo.cypher` se genera desde la misma especificación: `salida/build/modelo_spec.py`).
-El submódulo de Lautaro no tiene PI2: sus frames se derivan de su PI1 y se marcan **{m.P_LAU}**.
+Los tres submódulos están modelados desde su PI2 (el de Lautaro se incorporó el 04/10/2026: `pi2/Quiros_Lautaro_PI2_U1.md`).
 
 ## 1. Nombres unificados
 
-| Concepto unificado | Matías (PI2) | Lautaro (PI1) | Luciano (PI2) | Por qué |
+| Concepto unificado | Matías (PI2) | Lautaro (PI2) | Luciano (PI2) | Por qué |
 |---|---|---|---|---|
-| **Cartel** | — (trabaja con Pedido/Dato) | Cartel, Configuración propuesta | Diseño | Es el objeto que se evalúa y rediseña; «Diseño» queda como sinónimo |
+| **Cartel** | — (trabaja con Pedido/Dato) | Configuración del cartel (C1) + Cartel (C2) | Diseño | Es el objeto que se evalúa y rediseña. La Configuración de Lautaro es el Cartel con sus relaciones; su `estado` vive en `DictamenAdecuacion.resultado` (no_evaluable = pendiente_de_datos) |
 | **FichaRequerimientos** | Ficha de requerimientos interpretados | ficha de requerimientos | FichaRequerimientos | Ya estaba alineado: es la interfaz entre submódulos |
 | **Requerimiento → RestriccionCliente / Preferencia / NecesidadFuncional** | ídem, con `rigidez` | «restricciones del cliente» | RestricciónCliente (rigidez + fidelidad_logo, tamaño_final_fijo, no_invasiva) | Los slots booleanos de Luciano pasan a `criterio` + `nivel`; la rigidez es la de Matías |
-| **Entorno** | Dato `entorno` | Entorno → Exposición ambiental | slot `Diseño.entorno` | Nodo propio: tiene tipo, protección y nivel de exposición (variable difusa candidata) |
-| **Conflicto** | — | «restricción detectada con su causa» | Conflicto | Mismo concepto: hallazgo que viola un límite. `origen` = instalación o manufactura |
+| **Entorno** | Dato `entorno` | Entorno (C6) → Exposición ambiental (C8) | slot `Diseño.entorno` | Nodo propio con los slots del frame ENTORNO de Lautaro; la exposición (un estado) pasa a slot `nivel_exposicion` (variable difusa candidata) |
+| **Conflicto** | — | Restricción (C15) con severidad excluyente / corregible | Conflicto | Mismo concepto: hallazgo que viola un límite o criterio. `origen` = instalación o manufactura; `severidad` decide el dictamen |
 | **RestriccionConstructiva** | — | — | RestricciónConstructiva | Límite físico (6 mm, 400 mm). Se separa del hallazgo (Conflicto) |
-| **DictamenAdecuacion** | — | Dictamen de adecuación | EvaluaciónMateriales | Salida de Lautaro y entrada de Luciano |
-| **SistemaFijacion** / **Soporte** | — | Sistema de fijación / Soporte | SistemaFijación (sin. «Soporte») | Se elimina el sinónimo ambiguo: Soporte = superficie; SistemaFijacion = elementos de unión |
-| **Material** | — | acrílico, PVC, ACM, chapa, silicona | PLA, PETG | Un frame; solo PLA/PETG tienen propiedades documentadas |
+| **DictamenAdecuacion** | — | Dictamen de adecuación (C19), que reúne restricciones, impone condiciones, establece requisitos y señala verificaciones | EvaluaciónMateriales | Salida de Lautaro y entrada de Luciano |
+| **SistemaFijacion** / **Soporte** | — | Sistema de fijación (C11) se_ancla_en Soporte (C9) | SistemaFijación (sin. «Soporte») | Se elimina el sinónimo ambiguo: Soporte = superficie; SistemaFijacion = elementos de unión |
+| **Material** | — | PLA, PETG, acrílico (alcance acotado al taller, M2) | PLA, PETG | Un frame con especializaciones PLA, PETG y Acrilico |
 | **TecnologiaIluminacion** vs `tipo_cartel` | Dato tecnología (corpóreo) + iluminación | tiene_tecnología (Neón LED / Corpóreo / Retroiluminado) | NeónFrontal / Retroiluminado | El tipo de cartel (PG0) y la tecnología de iluminación son ejes distintos |
 | **Recomendacion** | — | — | Recomendación (sin. «Dictamen») | «Dictamen» queda para Lautaro |
-| **Aclaracion** | Aclaración / Consulta a submódulo | «solicitud de datos faltantes» | «devolver al submódulo de interpretación» (R8) | Todo pedido al cliente pasa por Interpretación |
-| **UTILIZA / SE_FIJA_CON** | — | usa / se_fija_con | utiliza | Un verbo por relación |
+| **Aclaracion** | Aclaración / Consulta a submódulo | Solicitud de datos faltantes (C13) | «devolver al submódulo de interpretación» (R8) | Todo pedido al cliente pasa por Interpretación |
+| **RequisitoMaterial / CondicionInstalacion** | — | Requisito de material (C17) / Condición de instalación (C16) | — (el requisito llega con el dictamen) | Frames nuevos del PI2 de Lautaro: lo que el material todavía no elegido debe cumplir y lo que hay que hacer para resolver una restricción corregible |
+| **UTILIZA / SE_FIJA_CON** | — | usa, incorpora / se_fija_con | utiliza | Un verbo por relación |
 
 ## 2. Red semántica integrada
 
@@ -155,15 +156,17 @@ Imagen: `salida/img/jerarquia_frames.png`. Cómo se pasó de la red a los marcos
 
 ## 4. Reglas trazables
 
-Origen: **experto** = conocimiento relevado de Luciano (en Lautaro, declarado «experto» en su PI1 pero todavía
-candidato); **propuesta** = regla formulada por nosotros (Matías o integración) pendiente de validar con el experto;
+Origen: **experto** = conocimiento relevado de Luciano (en Lautaro, R-MI-01 a R-MI-11: criterios del experto
+formalizados en su PI2, con los umbrales como parámetros «a validar»); **propuesta** = regla formulada por nosotros
+(Matías, integración, y R-MI-12/13/14, que Lautaro agregó al modelar) pendiente de validar con el experto;
 **documental** = sale de una ficha técnica o norma. En Neo4j cada regla es un nodo `:Regla` con `[:USA]->(:Slot)`.
 
 {tabla_reglas()}
 
 **Estrategia de resolución de conflictos.** Se conserva la de Matías (INT-R09 → INT-R13 → detección → clasificación →
 aclaraciones → INT-R11 → INT-R12) y se extiende al flujo integrado: Interpretación → INTEG-01 → Materiales
-(R-MI-01 → exposición → R-MI-03/04/06 → dictamen) → Manufacturabilidad (MAN-R7 → detección R2/R3/R4 → filtros
+(orden de disparo del PI2 de Lautaro: R-MI-01 → exposición R-MI-08/02/09 → detección R-MI-03…07, 13, 14, que se
+acumulan → dictamen R-MI-12 > R-MI-11 > R-MI-10) → Manufacturabilidad (MAN-R7 → detección R2/R3/R4 → filtros
 R6/R5/R9/FILTRO → R8) → INTEG-02. Es el orden de los bloques de `neo4j/04_consultas.cypher`.
 
 ### Excepciones
@@ -177,10 +180,12 @@ marcadores crisp.
 
 | Variable lingüística | Términos tentativos | Dónde vive en el modelo | Fuente |
 |---|---|---|---|
-| Exposición ambiental | baja / media / alta | `Entorno.nivel_exposicion` (R-MI-02, R-MI-GEN) | PI1 Lautaro §8 |
-| Dificultad de instalación | — | altura, acceso, soporte, tamaño | PI1 Lautaro §8 |
-| Confiabilidad del soporte | — | `Soporte.capacidad` | PI1 Lautaro §8 |
-| Límite «mediano / gran porte» | — | R-MI-06 (hoy: advertencia) | PI1 Lautaro §8 |
+| Exposición ambiental | baja / media / alta | `Entorno.nivel_exposicion` (R-MI-02, R-MI-08, R-MI-09) | PI2 Lautaro §i (principal candidata) |
+| Porte del cartel y carga de viento | chico / intermedio / grande | R-MI-06 (FR-02 quedó en la frontera) | PI2 Lautaro §i |
+| Confiabilidad del soporte | poco confiable / aceptable / confiable | `Soporte.capacidad_relativa`, `Soporte.estado` | PI2 Lautaro §i |
+| Efectividad de la protección | nula / parcial / efectiva | `Entorno.alcance_proteccion` (R-MI-08) | PI2 Lautaro §i |
+| Peso respecto del soporte | holgado / en el límite / excedido | R-MI-05 (umbral a validar) | PI2 Lautaro §i |
+| Dificultad de instalación | baja / media / alta | (no modelada como slot) | PI2 Lautaro §i |
 | Flexibilidad estética del cliente | Baja / Media / Alta | `RestriccionCliente.nivel` (MAN-R5) | PI2 Luciano §i |
 | Complejidad de fabricación | Rutinaria / Moderada / Crítica | (no modelada aún) | PI2 Luciano §i |
 | Fidelidad al logo / impacto estético | Imperceptible / Aceptable / Deformativo | `AlternativaRediseno.impacto_estetico` (MAN-R6) | PI2 Luciano §i |
@@ -206,25 +211,44 @@ Base: P-01 del PI2 de Matías (iteraciones 1 y 2, tal cual) + regla R-MI-01 de L
 | 5 | Interpretación | respuesta a A4 **[dato de prueba simulado]**: «pared de ladrillo revocado… pegado a la pared» | INT-R13, INT-R09 | D4 confirmado (mampostería, adosado), iteración 3 |
 | 6 | Interpretación | — | INT-R11 | listo → **FR-01** |
 | 7 | Integración | FR-01 | INTEG-01 | Cartel 1000 mm, interior, mampostería; tecnología `[PENDIENTE]` |
-| 8 | **Materiales** | Cartel + Entorno | R-MI-01, R-MI-GEN, R-MI-10 | exposición baja → **apto** (advertencia EX-02 no verificable) |
+| 8 | **Materiales** | Cartel + Entorno + Soporte | R-MI-01, R-MI-GEN, R-MI-10 | exposición baja (humedad normal y sin sol directo: valores por defecto del frame); mampostería = buen soporte → **apto** |
 | 9 | **Manufacturabilidad** | Geometría 1000 mm vs impresora 400 mm | MAN-R3, MAN-FILTRO | ExcedeCama → **Segmentación modular + refuerzo**, viables |
 | 10 | Integración | — | INTEG-02 | Recomendación; **decide el fabricante** |
 
 ### CU2 — «Letras corpóreas exterior»: FR-02 cruza los tres submódulos
 
-Base: P-02 / FR-02 del PI2 de Matías + casos típicos de Lautaro («corpóreo exterior en fachada → apto con
-condiciones») + «Continuidad» del PI2 de Luciano (R3 y R7 sobre FR-02).
+Base: P-02 / FR-02 del PI2 de Matías + **caso 1 del PI2 de Lautaro** (FR-02, apto con condiciones) + «Continuidad»
+del PI2 de Luciano (R3 y R7 sobre FR-02). Los tres PI2 usan el mismo caso: la integración no es inventada.
 
 | Paso | Submódulo | Entrada | Regla | Salida |
 |---|---|---|---|---|
 | 1 | Interpretación | «letras corpóreas con luz… da a la calle… 3 m… sí o sí antes de la inauguración… si se puede colores del logo» + foto sin luz | INT-R03, R04, R05, R02, R10 | K1 contradicción, RC1 obligatoria, PR1 preferencia, D11 faltante |
 | 2 | Interpretación | «llevan luz; la foto era por la tipografía; sobre la marquesina a 4 m» | INT-R13, R11, R12 | **FR-02** + AV2 (la referencia solo vale para tipografía) |
-| 3 | Integración | FR-02 | INTEG-01 | Cartel corpóreo, con luz, 3000 mm, exterior, marquesina, 4 m |
-| 4 | **Materiales** | Cartel + Entorno | R-MI-02 | exposición **alta** (advertencia EX-01: alero/nicho no informado) |
-| 5 | **Materiales** | componentes / material / altura | R-MI-03, R-MI-04, R-MI-06, R-MI-11 | **apto con condiciones**: IP de lo eléctrico `[PENDIENTE grado]`, material apto exterior; verificación estructural a confirmar `[PENDIENTE umbral]` |
-| 6 | **Manufacturabilidad** | entorno exterior | MAN-R7 | **PETG** (descarta PLA) → resuelve la condición de material de Lautaro |
+| 3 | Integración | FR-02 | INTEG-01 | Cartel corpóreo, con luz, 3000 mm, exterior, sobre estructura (marquesina), 4 m; sin material ni componentes |
+| 4 | **Materiales** | Cartel + Entorno | R-MI-01, R-MI-02 | datos mínimos OK (falta material: no bloquea); exposición **alta** (sin protección superior) |
+| 5 | **Materiales** | material / componentes / soporte / altura | R-MI-13, R-MI-14, R-MI-06 | requisitos RQ-MAT (cuerpo y frente aptos exterior/UV) y RQ-COMP (protección contra agua, IP a validar); condiciones «relevar la marquesina» y «fuente accesible»; verificación estructural (altura y viento) |
+| 6 | **Materiales** | — | R-MI-11 | sin restricciones excluyentes → **apto con condiciones** |
+| 6b | **Manufacturabilidad** | entorno exterior + RQ-MAT | MAN-R7, INTEG-03 | **PETG** (descarta PLA) → cumple el requisito de material de Lautaro para el cuerpo |
 | 7 | **Manufacturabilidad** | 3000 mm vs 400 mm | MAN-R3, MAN-FILTRO | Segmentación (= letra por letra) + refuerzo; advertencia: impacto en RC1 (plazo) `[PENDIENTE]` |
 | 8 | Integración | — | INTEG-02 | Recomendación con material, alternativas y condiciones de instalación; decide el fabricante |
+
+### Caso de prueba complementario de Materiales: FR-07 (caso 2 del PI2 de Lautaro)
+
+Neón LED doble faz en bandera sobre la vereda, 3 m de altura, fachada de mampostería con alero de 0,4 m (el cartel
+sobresale 1,0 m). El cliente quiere reutilizar el Neón LED y la fuente de interior; la fuente iría cerrada en la caja.
+
+| Paso | Regla | Salida |
+|---|---|---|
+| 1 | R-MI-01 | datos mínimos completos |
+| 2 | R-MI-08 → R-MI-02 | la excepción del alero **se evalúa y no aplica** (no cubre) → exposición alta; queda registrada (EXC-FR-07) |
+| 3 | R-MI-03 | restricción **eléctrica excluyente**, causada por el Neón LED, la fuente y la exposición |
+| 4 | R-MI-07 | restricción de mantenimiento **corregible** → condición «fuente accesible y protegida» |
+| 5 | R-MI-06 | verificación estructural (bandera sobre la vereda + viento) |
+| 6 | R-MI-12 | **no apto** (prioridad sobre R-MI-11); pasa a Manufacturabilidad con todas las causas |
+
+Manufacturabilidad no genera recomendación: cambiar componentes o reubicar la fuente es rediseño, y el PI2 de
+Luciano no tiene regla para eso `[PENDIENTE: regla de rediseño para restricciones eléctricas y de mantenimiento]`.
+Imagen: `salida/img/fr07_instanciado.png`.
 
 ### Casos de prueba complementarios (submódulo de Luciano)
 
@@ -236,8 +260,11 @@ infill). Se usan para mostrar el **filtro por restricciones del cliente** (`sali
 
 - La integración resolvió un hueco real: la criticidad «bloqueante/postergable» que Matías no podía decidir la
   responde la regla R-MI-01 de Lautaro (consulta Q1). Es el tipo de dependencia que el modelo separado no mostraba.
-- La condición de material de Lautaro (R-MI-04) la resuelve una regla documental de Luciano (MAN-R7): dos submódulos,
-  un mismo nodo `Conflicto`.
+- El requisito de material que deja Lautaro cuando la ficha no trae material (R-MI-13) lo cumple una regla documental
+  de Luciano (MAN-R7 → PETG): `RequisitoMaterial -[:SE_CUMPLE_CON]-> Material`. Lautaro no elige el material, pero deja
+  la evidencia que la regla de Luciano necesita (así lo dice su PI2).
+- Con el PI2 de Lautaro el dictamen cubre los tres resultados: apto (CU1), apto con condiciones (CU2) y no apto (FR-07).
+- R-MI-12/13/14 son reglas nuevas que surgieron al modelar (no del relevamiento): se marcan como **propuesta**.
 - Inconsistencia detectada en el material: el conjunto provisional `datos_requeridos` incluye «apariencia», pero
   FR-02 no registra ningún dato de apariencia y aun así el PI2 de Matías lo da por suficiente. Se mantiene el
   resultado documentado (P-02 listo) y se marca para revisar `[PENDIENTE]`.

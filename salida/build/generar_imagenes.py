@@ -127,6 +127,7 @@ POS_COMPLETA = {
     "ComponenteElectrico": (12.6, 10.0), "SistemaFijacion": (17.6, 10.0), "Soporte": (20.2, 11.0),
     "DictamenAdecuacion": (14.2, 5.6), "VerificacionProfesional": (13.4, 3.4), "Conflicto": (17.4, 5.8),
     "Excepcion": (16.0, 1.4), "Regla": (18.6, 1.4),
+    "CondicionInstalacion": (16.8, 3.6), "RequisitoMaterial": (19.4, 3.4), "Acrilico": (19.8, 13.6),
     "Geometria": (20.4, 8.4), "TecnologiaIluminacion": (21.4, 13.2), "Herramienta": (23.8, 11.4),
     "RestriccionConstructiva": (23.2, 7.8), "AlternativaRediseno": (21.0, 4.6), "Recomendacion": (23.6, 2.8),
     "Evaluacion": (21.2, 1.0),
@@ -225,13 +226,16 @@ def etiqueta(n):
         "Cartel": lambda: f"{p.get('tipo_cartel') or 'tipo s/d'} · {p.get('dimension_maxima_mm')} mm",
         "Geometria": lambda: f"dim. máx = {p.get('dimension_maxima_mm')} mm" + (f"\ncanal = {p.get('ancho_canal_mm')} mm" if p.get("ancho_canal_mm") else "") + ("\nsupera carga" if p.get("supera_carga_admisible") else ""),
         "Entorno": lambda: f"{p.get('tipo')} · exposición {p.get('nivel_exposicion')}",
-        "Soporte": lambda: str(p.get("tipo")),
+        "Soporte": lambda: f"{p.get('tipo')} · {p.get('estado')}",
+        "CondicionInstalacion": lambda: corto(p.get("descripcion"), 34),
+        "RequisitoMaterial": lambda: corto(p.get("exigencia"), 34),
+        "Excepcion": lambda: f"{p.get('tipo')} · aplica = {p.get('aplica')}",
         "SistemaFijacion": lambda: str(p.get("tipo") or "[PENDIENTE]"),
-        "ComponenteElectrico": lambda: "IP [PENDIENTE]",
+        "ComponenteElectrico": lambda: f"{p.get('tipo')} · uso {p.get('uso_declarado')}",
         "Material": lambda: f"{p.get('nombre')} (apto ext. = {p.get('apto_exterior')})",
         "DictamenAdecuacion": lambda: f"{p.get('resultado')}\n({p.get('regla')})",
-        "VerificacionProfesional": lambda: f"{p.get('tipo')} · {p.get('estado')}",
-        "Conflicto": lambda: f"{p.get('tipo')} ({p.get('estado')})",
+        "VerificacionProfesional": lambda: f"{p.get('tipo')} · " + ", ".join(p.get("motivo") or []),
+        "Conflicto": lambda: f"{p.get('tipo')} ({p.get('severidad') or p.get('estado')})",
         "Herramienta": lambda: f"{p.get('tipo')}\n{p.get('volumen_util_maximo')} mm",
         "RestriccionConstructiva": lambda: f"{p.get('tipo')} ≤ {p.get('valor_limite')} {p.get('unidad') or ''}",
         "TecnologiaIluminacion": lambda: p.get("nombre"),
@@ -239,7 +243,7 @@ def etiqueta(n):
         "Recomendacion": lambda: f"{p.get('tipo')} · decide {p.get('decide')}",
         "Evaluacion": lambda: "rastro de decisión",
     }
-    base = {"DatoConfirmado": "Dato", "DatoFaltante": "Dato", "DatoAmbiguo": "Dato", "PLA": "Material", "PETG": "Material",
+    base = {"DatoConfirmado": "Dato", "DatoFaltante": "Dato", "DatoAmbiguo": "Dato", "PLA": "Material", "PETG": "Material", "Acrilico": "Material",
             "SM_Materiales": "Submodulo", "SM_Manufacturabilidad": "Submodulo", "SM_Interpretacion": "Submodulo",
             "SegmentacionModular": "AlternativaRediseno", "CambioFijacion": "AlternativaRediseno",
             "CambioGeometria": "AlternativaRediseno", "CambioTecnologia": "AlternativaRediseno",
@@ -262,6 +266,7 @@ UBIC = {
     "SM_Interpretacion": (0, 6),
     "Cartel": (1, 1), "Entorno": (1, 2), "Soporte": (1, 3), "SistemaFijacion": (1, 2), "ComponenteElectrico": (1, 2),
     "DictamenAdecuacion": (1, 4), "VerificacionProfesional": (1, 5), "SM_Materiales": (1, 6),
+    "CondicionInstalacion": (1, 5), "RequisitoMaterial": (1, 5), "Excepcion": (1, 3), "Acrilico": (1, 3),
     "Geometria": (2, 1), "Herramienta": (2, 2), "RestriccionVolumen": (2, 2), "RestriccionTrazo": (2, 2), "RestriccionPeso": (2, 2),
     "NeonFrontal": (2, 1), "PLA": (2, 3), "PETG": (2, 3), "SegmentacionModular": (2, 4), "CambioFijacion": (2, 5),
     "CambioGeometria": (2, 4), "CambioTecnologia": (2, 4), "Recomendacion": (2, 6), "Evaluacion": (2, 7),
@@ -378,7 +383,6 @@ grafo_curado({
     "C-01": (0, 7.2), "P-01": (3.3, 7.2), "E13": (3.3, 9.0), "A4": (7.0, 9.0), "D4": (7.0, 7.2), "Q1": (7.0, 5.5),
     "SM-MAT": (3.3, 4.0), "D5": (10.8, 9.0), "FR-01": (10.8, 6.6), "NF1": (14.6, 7.6),
     "CAR-P-01": (10.8, 3.6), "FIJ-P-01": (7.0, 3.6), "SOP-P-01": (7.0, 2.2), "DIC-CU1": (14.6, 3.6), "ENT-P-01": (14.6, 2.0),
-    "AV-EX02-CU1": (18.2, 3.6),
     "GEO-P-01": (10.8, 0.8), "RC-VOL": (7.0, 0.8), "IMP3D": (3.3, 0.8), "CONF-VOL-CAR-P-01": (7.0, -0.9),
     "ALT-SEG-CAR-P-01": (11.4, -0.9), "ALT-REF-CAR-P-01": (15.6, -0.9), "REC-CU1": (19.6, -0.9),
 }, "cu1_instanciado.png", "CU1 «Café Andino» — de pedido incompleto a recomendación (instancias en Neo4j)",
@@ -387,12 +391,21 @@ grafo_curado({
 grafo_curado({
     "C-02": (0, 7.2), "P-02": (3.3, 7.2), "RV2": (3.3, 9.0), "K1": (7.0, 9.0), "RC1": (7.0, 7.2), "PR1": (7.0, 5.6),
     "AV2": (10.8, 9.0), "FR-02": (10.8, 6.6),
-    "CE-P-02": (7.0, 3.9), "CAR-P-02": (10.8, 3.6), "FIJ-P-02": (7.0, 2.5), "SOP-P-02": (3.3, 2.5),
-    "DIC-CU2": (14.6, 4.6), "ENT-P-02": (14.6, 2.6), "CONF-IP-CU2": (18.4, 5.6), "CONF-MAT-CU2": (18.4, 4.1), "VP-CU2": (18.4, 2.6),
+    "CAR-P-02": (10.8, 3.6), "FIJ-P-02": (7.0, 3.6), "SOP-P-02": (3.3, 3.6),
+    "DIC-CU2": (14.6, 4.6), "ENT-P-02": (14.6, 2.6), "RQ-MAT-CU2": (18.8, 6.4), "RQ-COMP-CU2": (18.8, 5.0),
+    "CI-SOPORTE-CU2": (18.8, 3.6), "CI-FUENTE-CU2": (18.8, 2.2), "VP-CU2": (21.8, 4.3),
     "GEO-P-02": (10.8, 0.8), "RC-VOL": (7.0, 0.8), "IMP3D": (3.3, 0.8), "MAT-PETG": (14.6, 0.8),
     "CONF-VOL-CAR-P-02": (7.0, -0.9), "ALT-SEG-CAR-P-02": (11.4, -0.9), "ALT-REF-CAR-P-02": (15.6, -0.9), "REC-CU2": (19.6, -0.9),
 }, "cu2_instanciado.png", "CU2 «Letras corpóreas exterior» — FR-02 cruza los tres submódulos (instancias en Neo4j)",
-   t_lab={("RC1", "CAR-P-02"): 0.35, ("CONF-MAT-CU2", "ENT-P-02"): 0.3, ("CONF-IP-CU2", "ENT-P-02"): 0.3})
+   t_lab={("RC1", "CAR-P-02"): 0.35}, figsize=(18.5, 9.0))
+
+grafo_curado({
+    "FR-07": (0, 6.0), "CAR-FR-07": (3.6, 6.0), "ENT-FR-07": (7.4, 7.8), "EXC-FR-07": (3.6, 7.8),
+    "CE-FR-07-NEON": (3.6, 4.2), "CE-FR-07-FUENTE": (3.6, 2.4), "FIJ-FR-07": (0, 4.0), "SOP-FR-07": (0, 2.2),
+    "RES-ELEC-FR-07": (7.8, 4.4), "RES-MANT-FR-07": (7.8, 2.4), "CI-FUENTE-FR-07": (11.8, 2.4),
+    "DIC-FR-07": (11.8, 5.6), "VP-FR-07": (11.8, 7.6), "SM-MAN": (15.2, 5.6),
+}, "fr07_instanciado.png", "FR-07 (caso 2 del PI2 de Lautaro) — Neón LED en bandera: dictamen no apto con sus causas",
+   figsize=(17.5, 8.0))
 
 # ----------------------------------------------------------------------------- filtro (L-C1 y L-C3)
 d = q("""

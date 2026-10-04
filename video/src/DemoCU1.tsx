@@ -1,4 +1,4 @@
-// Video de respaldo de la demo en Neo4j: caso de prueba CU1, 1920×1080 a 30 fps, sin audio.
+// Video de respaldo de la demo en Neo4j: CU1 de punta a punta + dictámenes de CU2 y FR-07, 1920×1080 a 30 fps, sin audio.
 // Todo lo que se ve del Browser son capturas reales grabadas por capturas/grabar.mjs (public/rec/).
 import React from 'react';
 import { AbsoluteFill, Easing, Img, interpolate, Sequence, staticFile, useCurrentFrame } from 'remotion';
@@ -122,7 +122,7 @@ export const DemoCU1: React.FC = () => {
         <Placa
           arriba="Grupo 11 · UTN FRM · Inteligencia Artificial"
           texto="Asistente Inteligente para Evaluación Técnica y Rediseño de Cartelería Comercial"
-          abajo="Demo en Neo4j: caso de prueba CU1 «Café Andino»"
+          abajo="Demo en Neo4j: CU1 «Café Andino», CU2 y FR-07"
         />
       </Sequence>
       {PASOS.map((paso) => {

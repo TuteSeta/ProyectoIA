@@ -1,9 +1,9 @@
 # 01 — Relevamiento del material del Grupo 11
 
-Fuentes leídas: `pg0/PG0_Grupo11.md`, `pi1/PI1_{Matias,Lautaro,Luciano}.md`, `pi2/PI2_{Matias,Luciano}.md`,
+Fuentes leídas: `pg0/PG0_Grupo11.md`, `pi1/PI1_{Matias,Lautaro,Luciano}.md`, `pi2/PI2_{Matias,Luciano}.md`, `pi2/Quiros_Lautaro_PI2_U1.md`,
 `consigna/*.md` y los 9 diagramas de `pi1/img` y `pi2/img` (abiertos y revisados).
-**No existe PI2 de Lautaro**: su submódulo se releva desde su PI1 (§10 conceptos y reglas R-MI-01 a R-MI-11)
-y se marca `[PENDIENTE: PI2 Lautaro]`. `referencias/` y `difusa/` están vacías.
+**Actualización 04/10/2026:** se incorporó el PI2 de Lautaro (`pi2/Quiros_Lautaro_PI2_U1.md`); las secciones 2.2 y 3.3
+ya no salen de su PI1 y los `[PENDIENTE: PI2 Lautaro]` quedaron resueltos. `referencias/` y `difusa/` están vacías.
 
 ---
 
@@ -45,24 +45,28 @@ se_describe_mediante, pertenece_a, involucra, provoca, solicita, se_dirige_a, ac
 evalúa_suficiencia_de, requiere_consulta_a, produce, registra, preserva, incluye (advertencia), alimenta,
 es_un, omite, cubre.
 
-### 2.2 Lautaro (solo PI1 §10 — `[PENDIENTE: PI2 Lautaro]`)
+### 2.2 Lautaro (PI2 — 19 conceptos, 22 relaciones)
 
-| Relación preliminar (PI1 §10) |
-|---|
-| Cartel → tiene_tecnología → Neón LED / Corpóreo / Retroiluminado |
-| Cartel → usa → Material / Componente eléctrico |
-| Cartel → se_instala_en → Entorno |
-| Entorno → se_interpreta_como → Exposición ambiental (baja / media / alta) |
-| Material → resiste / no_resiste → Agente ambiental (UV, agua, temperatura) |
-| Componente eléctrico → posee → Grado de protección IP |
-| Cartel → se_fija_con → Sistema de fijación → sobre → Soporte |
-| Soporte → admite / no_admite → Carga del cartel |
-| Configuración → presenta → Restricción → causada_por → Material / Soporte / Fijación / Exposición |
-| Excepción → modifica → Regla |
-| Dictamen de adecuación → alimenta → Evaluación de manufacturabilidad y rediseño |
+| ID | Concepto | Tipo |
+|---|---|---|
+| C1 | Configuración del cartel | Concepto principal (frame central) |
+| C2 | Cartel → Neón LED / Corpóreo / Retroiluminado | Entidad + es_un |
+| C3 | Material → PLA / PETG / Acrílico (alcance del taller, M2) | Entidad + es_un |
+| C4–C5 | Componente eléctrico (tira de Neón LED, tira LED, fuente) · Grado de protección IP | Entidad · Evidencia |
+| C6–C8 | Entorno (interior / exterior protegido / exterior expuesto) · Agente ambiental · Exposición ambiental (baja/media/alta) | Entidad · Entidad · Estado |
+| C9–C11 | Soporte · Método de instalación · Sistema de fijación | Entidades |
+| C12–C13 | Ficha de requerimientos (entrada) · Solicitud de datos faltantes | Evidencia · Evento |
+| C14 | Excepción (alero, nicho, interior húmedo) | Restricción contextual |
+| C15 | Restricción → material–entorno / eléctrica / de instalación / de mantenimiento, con severidad excluyente/corregible | Restricción + es_un |
+| C16–C18 | Condición de instalación · Requisito de material · Verificación profesional | Acciones |
+| C19 | Dictamen de adecuación (apto / apto con condiciones / no apto) | Estado (salida) |
 
-Glosario adicional: Configuración propuesta, Método de instalación (adosado / bandera / colgado / sobre
-estructura), Verificación profesional.
+Relaciones RL1–RL22: alimenta, genera, describe, usa, incorpora, posee, se_instala_en, somete_a, se_interpreta_como,
+resiste, se_monta_mediante, se_apoya_en, se_fija_con, se_ancla_en, ajusta, presenta, causada_por, se_resuelve_con,
+requiere, recibe, reúne/impone/establece/señala, alimenta (manufacturabilidad).
+Modificaciones M1–M9 al cuaderno: nombres alineados con Matías y Luciano (M1), alcance FDM (M2), conceptos nuevos
+Requisito de material (M3) y Condición de instalación (M4), severidad de la restricción (M5), reglas nuevas
+R-MI-12/13/14 (M6–M7), datos bloqueantes vs postergables (M8, responde Q1/Q2 de Matías), carga como slot (M9).
 
 ### 2.3 Luciano (PI2 — 14 conceptos, 14 relaciones)
 
@@ -138,25 +142,24 @@ Valores documentales utilizables: **6 mm** (ancho mínimo tira neón), **400 × 
 **PLA no apto exterior / PETG apto** (propiedades térmicas FDM). La carga admisible de la cinta bifaz **no
 tiene valor** (`[PENDIENTE]`).
 
-### 3.3 Lautaro — sin frames (`[PENDIENTE: PI2 Lautaro]`)
+### 3.3 Lautaro — 8 frames principales + 5 secundarios (PI2)
 
-Reglas candidatas (PI1 §7), sin valores numéricos:
+| Frame | Slots clave (facetas) | Demonios |
+|---|---|---|
+| Configuración_Cartel (central) | ficha, cartel, entorno/soporte/método (**bloqueantes**), estado {pendiente_de_datos, habilitada, evaluada} | si_necesario → Solicitud de datos (R-MI-01); si_modificado habilitada → disparar R-MI-02…14 |
+| Cartel | tipo, dimensiones (bloqueante), peso_estimado (a validar), materiales, componentes, iluminación, doble_faz | si_necesario materiales → R-MI-13 |
+| Entorno | ubicación, protección_superior (defecto ninguna), alcance_protección, humedad (defecto normal), sol_directo (defecto no), altura, exposición | si_añadido protección → R-MI-08; si_necesario exposición → R-MI-02/08/09 |
+| Material | tipo, función, apto_exterior {sí, no, a_validar}, resistencia_UV / térmica (a validar) | — |
+| Componente eléctrico | tipo, uso_declarado, grado_IP (exigido: a validar), ubicación y accesible (fuente) | si_necesario IP con exposición alta → sin protección; interna_cerrada → R-MI-07 |
+| Soporte | tipo, capacidad_relativa (a validar), estado (defecto no_verificado), estructura_portante | no_verificado → R-MI-14; estructura → excepción de R-MI-05 |
+| Restricción (abstracto) | tipo, causa (1..n), severidad {excluyente, corregible}, condición, regla_origen | corregible → crear condición |
+| Dictamen_Adecuación | resultado, restricciones, condiciones, requisitos, verificaciones, reglas_aplicadas | si_necesario: R-MI-12 → R-MI-11 → R-MI-10 |
+| Secundarios | Excepción (aplica sí/no, se guarda aunque no aplique), Condición, Requisito, Verificación, Solicitud de datos | — |
 
-| ID | SI | ENTONCES | Fuente declarada |
-|---|---|---|---|
-| R-MI-01 | falta entorno, soporte o dimensiones | no evaluar; pedir el dato a interpretación | Experto |
-| R-MI-02 | exterior, sin alero/nicho, expuesto a sol y lluvia | exposición alta | Experto |
-| R-MI-03 | exposición alta y componente eléctrico sin protección contra agua | restricción componente–entorno | IEC 60529 + experto |
-| R-MI-04 | exposición alta y material no apto exterior/UV | restricción material–entorno | Documento + experto |
-| R-MI-05 | soporte de baja capacidad y peso mayor al seguro | restricción de instalación; revisar fijación a estructura | Experto |
-| R-MI-06 | gran porte, bandera o altura con viento | verificación estructural profesional | Experto + CIRSOC 102 |
-| R-MI-07 | fuente sin acceso | restricción de mantenimiento | Experto |
-| R-MI-08 | exterior en nicho o bajo alero | reducir exposición (magnitud a validar) | Experto |
-| R-MI-09 | interior con humedad alta o sol directo | exposición media o alta | Experto |
-| R-MI-10 | sin restricciones y datos completos | apto; derivar a manufacturabilidad | Experto |
-| R-MI-11 | restricciones resolubles con condiciones | apto con condiciones | Experto |
-
-Además, regla general de §6: «un interior se evalúa con exposición baja».
+Reglas **R-MI-01 a R-MI-14**, todas crisp; los umbrales (grado IP, peso seguro, gran porte, alero efectivo) son
+parámetros «a validar», sin números. Orden de disparo: R-MI-01 → exposición (02, 08, 09) → detección (03–07, 13, 14,
+se acumulan) → dictamen (12 > 11 > 10). R-MI-12 (no apto), R-MI-13 (material no definido → requisito) y R-MI-14
+(soporte no verificado → condición) son nuevas del PI2.
 
 ---
 
@@ -170,7 +173,8 @@ Además, regla general de §6: «un interior se evalúa con exposición baja».
 | L-C1 Logo cursiva | PI2 Luciano | canal 4 mm, NeónFrontal, fidelidad logo alta | TrazoFino → Engrosar (rechazada) / Retroiluminado (admitida) |
 | L-C2 Cartel circular | PI2 Luciano | Ø 500 mm, tamaño final fijo | ExcedeCama → Segmentación + refuerzo (admitida) |
 | L-C3 Cartel pesado | PI2 Luciano | peso > carga cinta bifaz, instalación no invasiva | RiesgoCaída → CambioFijación (rechazada) / ReducirInfill (admitida) |
-| Casos típicos Lautaro | PI1 Lautaro §4 | Neón interior; corpóreo exterior en fachada; retroiluminado sobre yeso; bandera; fuente sin acceso | Dictámenes «probables» (apto / apto con condiciones / restricción) |
+| FR-02 en materiales | PI2 Lautaro, caso 1 | FR-02 sin material ni fuente definidos | exposición alta → RQ-01/02 (R-MI-13), CI-01 (R-MI-14), CI-02, VP-01 (R-MI-06) → **apto con condiciones** (R-MI-11) |
+| FR-07 Neón LED en bandera | PI2 Lautaro, caso 2 | 1,2 × 0,8 m doble faz, bandera a 3 m, alero 0,4 m que no cubre, Neón LED y fuente de interior | R-MI-08 no aplica → alta; R-01 eléctrica excluyente (R-MI-03), R-02 mantenimiento corregible (R-MI-07), VP-02 → **no apto** (R-MI-12) |
 
 ---
 
@@ -198,7 +202,7 @@ Además, regla general de §6: «un interior se evalúa con exposición baja».
 
 | # | Hueco | Impacto | Tratamiento |
 |---|---|---|---|
-| H1 | **No hay PI2 de Lautaro**: sin frames, slots ni facetas de su submódulo | Punto 4 de la consigna (marcos) incompleto para ese submódulo | Frames de Lautaro derivados de su PI1 §2, §7 y §10, marcados `[PENDIENTE: PI2 Lautaro]` |
+| H1 | ~~No hay PI2 de Lautaro~~ **Resuelto 04/10/2026** | — | Frames, reglas y casos tomados de su PI2 |
 | H2 | Umbrales de Lautaro: grado IP exigido, peso seguro por soporte, tamaño/altura que exige verificación estructural, magnitud de reducción por alero | R-MI-03/05/06/08 no son evaluables numéricamente | Las reglas se disparan como **condición o advertencia**, nunca con un número inventado |
 | H3 | Carga admisible de la cinta bifaz (`RestricciónConstructiva(Peso).valor_limite`) | R4 sin número | Se usa el hecho del caso («supera la carga») como dato de entrada |
 | H4 | Criterio de criticidad bloqueante/postergable (Matías M7) | R11 no decidible en P-01 | Se resuelve con R-MI-01 de Lautaro (falta soporte ⇒ bloqueante): integración real entre submódulos |

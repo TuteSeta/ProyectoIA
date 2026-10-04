@@ -24,7 +24,7 @@ INSTANCE_LABELS = ["Cliente", "Pedido", "ExpresionCliente", "ReferenciaVisual", 
                    "Advertencia", "Submodulo", "Cartel", "Entorno", "Material", "ComponenteElectrico", "Soporte",
                    "SistemaFijacion", "DictamenAdecuacion", "VerificacionProfesional", "Geometria", "Herramienta",
                    "TecnologiaIluminacion", "RestriccionConstructiva", "Conflicto", "AlternativaRediseno",
-                   "Recomendacion", "Evaluacion"]
+                   "Recomendacion", "Evaluacion", "CondicionInstalacion", "RequisitoMaterial", "AgenteAmbiental"]
 
 
 def esquema():
